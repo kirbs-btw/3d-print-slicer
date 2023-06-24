@@ -8,6 +8,22 @@ def main():
     cube = mesh.Mesh.from_file(stl_file)
     print(cube.vectors)
 
+    # thinking how to slice
+
+    """ 
+        straight obj
+        create straight from points
+
+        clac x,y with a z value
+        use fance math to fine point on that hight 
+
+        
+
+    
+    
+    
+    """
+
 
 if __name__ == "__main__":
     main()
