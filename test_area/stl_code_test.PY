@@ -3,6 +3,10 @@ from stl import mesh
 from mpl_toolkits import mplot3d
 from matplotlib import pyplot
 
+# point cloud graphing
+import pyvista as pv
+
+
 class line:
     def __init__(self, v1, v2):
         self.supportV, self.directionV, self.lower_bound, self.upper_bound = self.calcV(v1, v2)
@@ -94,6 +98,14 @@ def slice_z(lines):
     
     return points
 
+
+def show_points(points):
+    print("GRAPHING POINTS...")
+    point_cloud = pv.PolyData(points)
+    point_cloud.plot(eye_dome_lighting=True)
+    
+# way to slow 
+"""
 def graph_points(points):
     print("GRAPHING POINTS...")
     fig = pyplot.figure()
@@ -103,6 +115,7 @@ def graph_points(points):
         ax.scatter(i[0], i[1], i[2])
 
     pyplot.show()
+"""
 
 def main():
     # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
@@ -110,14 +123,9 @@ def main():
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
     points = slice_z(lines)
-
-    graph_points(points)
-    """ 
-
-        clac x,y with a z value
-        use fance math to fine point on that hight 
-
-        iteration through ervery hight
+    show_points(points)
+    """
+    missing the optimisation 
     """
 
 
