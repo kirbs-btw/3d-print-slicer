@@ -85,18 +85,34 @@ def create_line(mesh):
     return lines
 
 def slice_z(lines):
+    """
+    slices the obj by inserting the hight inside the 
+    line a param and calulating the points at this hight in the model 
+
+    optimization
+    - no real problem by now, algorithm is fast enough big models lode like one second
+
+    - could be optimized by excluding lines that are in one z plane and have no real hight
+    - excluding lines with smaler upperbound than the hight we are checking 
+    - deleting dublicate lines in the list --> stl files are saving sometime the same conection twice because of 
+    overlapping edges 
+    
+    """
+
     points = []
+    points_with_shift = []
 
 
-    for layer_hight in range(10):
-        layer_hight = (layer_hight / 10)
+    for layer_hight in range(100):
+        layer_hight = (layer_hight / 100)
         print(layer_hight)
         for line in lines:
             point = line.calcVfromH(layer_hight)
             if point != None: 
                 points.append(point)
-    
-    return points
+                points_with_shift.append(point)
+        points_with_shift.append("layer shift")
+    return points, points_with_shift
 
 
 def show_points(points):
@@ -104,26 +120,18 @@ def show_points(points):
     point_cloud = pv.PolyData(points)
     point_cloud.plot(eye_dome_lighting=True)
     
-# way to slow 
-"""
-def graph_points(points):
-    print("GRAPHING POINTS...")
-    fig = pyplot.figure()
-    ax = fig.add_subplot(projection='3d')
-
-    for i in points:    
-        ax.scatter(i[0], i[1], i[2])
-
-    pyplot.show()
-"""
 
 def main():
     # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
     stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
-    points = slice_z(lines)
+    points, points_with_shift = slice_z(lines)
     show_points(points)
+
+
+
+
     """
     missing the optimisation 
     """
