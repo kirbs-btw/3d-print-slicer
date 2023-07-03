@@ -97,24 +97,28 @@ def slice_z(lines):
     """
 
     points = []
-    points_with_shift = []
+    
 
 
     for layer_hight in range(100):
+        layer_points = []
         layer_hight = (layer_hight / 100)
         print(layer_hight)
         for line in lines:
             point = line.calcVfromH(layer_hight)
             if point != None: 
-                points.append(point)
-                points_with_shift.append(point)
-        points_with_shift.append("layer shift")
-    return points, points_with_shift
+                layer_points.append(point)
+        points.append(layer_points)
+    return points
 
 
 def show_points(points):
-    print("GRAPHING POINTS...")
-    point_cloud = pv.PolyData(points)
+    point_list = []
+    for i in points:
+        for j in i:
+            point_list.append(j)
+
+    point_cloud = pv.PolyData(point_list)
     point_cloud.plot(eye_dome_lighting=True)
     
 
@@ -123,7 +127,7 @@ def main():
     stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
-    points, points_with_shift = slice_z(lines)
+    points = slice_z(lines)
     # print(points)
     show_points(points)
     
