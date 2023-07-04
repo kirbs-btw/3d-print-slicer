@@ -100,15 +100,16 @@ def slice_z(lines):
     
 
 
-    for layer_hight in range(100):
+    for layer_hight in range(40):
         layer_points = []
-        layer_hight = (layer_hight / 100)
+        layer_hight = (layer_hight / 20) - 2
         print(layer_hight)
         for line in lines:
             point = line.calcVfromH(layer_hight)
             if point != None: 
                 layer_points.append(point)
-        points.append(layer_points)
+        if layer_points != []:
+            points.append(layer_points)
     return points
 
 
@@ -123,12 +124,12 @@ def show_points(points):
     
 
 def main():
-    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
     points = slice_z(lines)
-    # print(points)
+    print(points)
     show_points(points)
     
 
