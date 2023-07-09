@@ -18,6 +18,21 @@ def calc_dist_of_points(points):
     return dist_arr
 
 
+def nrml_points(points):
+    points = []
+
+    for layer in points:
+        for point in layer:
+            # add lowest values to points 
+            # bring points to normal level in bound of printer 
+
+            pass
+
+
+
+    return new_points
+
+
 def dist(point_a, point_b):
     x0 = point_a[0] - point_b[0]
     x1 = point_a[1] - point_b[1]
