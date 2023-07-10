@@ -17,6 +17,20 @@ def calc_dist_of_points(points):
         dist_arr.append(layer_dist)
     return dist_arr
 
+def find_lower_value(points):
+    x, y, z = points[0][0][0], points[0][0][1], points[0][0][2]
+    for layer in points:
+        for point in layer:
+            if point[0] < x:
+                x = point[0]
+            if point[1] < y:
+                y = point[1]
+            if point[2] < z:
+                z = point[2]
+ 
+
+    return x, y, z
+
 
 def nrml_points(points):
     points = []
@@ -28,7 +42,7 @@ def nrml_points(points):
 
             pass
 
-
+    new_points = []
 
     return new_points
 
