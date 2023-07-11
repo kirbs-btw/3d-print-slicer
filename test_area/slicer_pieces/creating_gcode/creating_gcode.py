@@ -31,10 +31,15 @@ def find_lower_value(points):
 
     return x, y, z
 
+def adding_lower_bound(points, x, y, z):
+    pass
 
 def nrml_points(points):
     points = []
 
+    x, y, z = find_lower_value(points)
+    adding_lower_bound(points, x, y, z)
+    
     for layer in points:
         for point in layer:
             # add lowest values to points 
