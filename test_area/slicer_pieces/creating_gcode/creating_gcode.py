@@ -32,20 +32,26 @@ def find_lower_value(points):
     return x, y, z
 
 def adding_lower_bound(points, x, y, z):
-    pass
+    new_points = []
+    for layer in points:
+        new_layer = []
+        for point in layer:
+            x1 = point[0] - x
+            x2 = point[1] - y
+            x3 = point[2] - z
+            # questionable math, figure out next time
 
+            new_point = [x1, x2, x3]
+            new_layer.append(new_point)
+
+        new_points.append(new_layer)
 def nrml_points(points):
     points = []
 
     x, y, z = find_lower_value(points)
     adding_lower_bound(points, x, y, z)
-    
-    for layer in points:
-        for point in layer:
-            # add lowest values to points 
-            # bring points to normal level in bound of printer 
 
-            pass
+
 
     new_points = []
 
