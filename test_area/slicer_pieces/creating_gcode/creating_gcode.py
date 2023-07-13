@@ -39,12 +39,15 @@ def adding_lower_bound(points, x, y, z):
             x1 = point[0] - x
             x2 = point[1] - y
             x3 = point[2] - z
-            # questionable math, figure out next time
+            
 
             new_point = [x1, x2, x3]
             new_layer.append(new_point)
 
         new_points.append(new_layer)
+    
+    return new_points
+
 def nrml_points(points):
     points = []
 
@@ -72,8 +75,11 @@ def print_points(points):
 
 def main():
     points = test_points.cube_points
+    x, y, z = find_lower_value(points)
+    points = adding_lower_bound(points, x, y, z)
+
+    print(points)
     print_points(calc_dist_of_points(points))
-    gcode(points)
     """
     order by nearest points
     
