@@ -73,6 +73,46 @@ def print_points(points):
     for i in points:
         print(i)
 
+def generate_moves(points, fill):
+    extrusion = fill
+    moves = []
+    moves.append("G0 Z0")
+    
+    max_int = len(points) - 1
+    for index, point in enumerate(points):
+        if (index + 1) > max_int:
+            break
+        elif points[index][2] != points[index+1][2]:
+            # layer shift condition 
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[index])
+            moves.append(line)
+            line = "G0 Z{}\n;LAYER:{}".format(points[index+1][2], index+1)
+            moves.append(line)
+        else:
+            line = "G0 Z{}\n;LAYER:{}".format(points[index+1][2], index+1)
+            moves.append(line) 
+    return moves
+
+def create_file(moves):
+
+    with open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/top_gcode.txt') as f:
+        top = f.readlines()
+
+    with open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/end_gcode.txt') as f:
+        end = f.readlines()
+
+    file = open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/gcode.gcode', 'w+')
+
+    for char in top:
+        file.write(char)
+
+    for char in moves:
+        file.write('\n{}'.format(char))
+
+    for char in end:
+        file.write(char)
+
+
 def main():
     points = test_points.cube_points
     x, y, z = find_lower_value(points)
