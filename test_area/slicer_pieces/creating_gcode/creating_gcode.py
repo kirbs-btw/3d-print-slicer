@@ -122,6 +122,10 @@ def main():
     print_points(calc_dist_of_points(points))
     """
     order by nearest points
+    adding dim to obj 
+    center it 
+    fix infill problem 
+
     
     """
 
