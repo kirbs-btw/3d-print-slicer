@@ -78,7 +78,20 @@ def generate_moves(points, fill):
     moves = []
     moves.append("G0 Z0")
     
-    max_int = len(points) - 1
+    for layer_index, layer in enumerate(points):
+        for point_index, point in enumerate(layer):
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
+            moves.append(line)
+            
+        # layer hopp 
+        # fix last layer hopp bug list index out of range
+        line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
+        moves.append(line)
+
+
+
+
+    """
     for index, point in enumerate(points):
         if (index + 1) > max_int:
             break
@@ -91,6 +104,8 @@ def generate_moves(points, fill):
         else:
             line = "G0 Z{}\n;LAYER:{}".format(points[index+1][2], index+1)
             moves.append(line) 
+    """
+
     return moves
 
 def create_file(moves):
@@ -122,10 +137,6 @@ def main():
     print_points(calc_dist_of_points(points))
     """
     order by nearest points
-    adding dim to obj 
-    center it 
-    fix infill problem 
-
     
     """
 
