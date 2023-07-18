@@ -4,6 +4,7 @@ import math
 def gcode(points):
     for layer in points:
         for point in layer:
+
             pass
 
 def calc_dist_of_points(points):
@@ -73,7 +74,7 @@ def print_points(points):
     for i in points:
         print(i)
 
-def generate_moves(points, fill):
+def create_moves(points, fill):
     extrusion = fill
     moves = []
     moves.append("G0 Z0")
@@ -88,23 +89,6 @@ def generate_moves(points, fill):
         line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
         moves.append(line)
 
-
-
-
-    """
-    for index, point in enumerate(points):
-        if (index + 1) > max_int:
-            break
-        elif points[index][2] != points[index+1][2]:
-            # layer shift condition 
-            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[index])
-            moves.append(line)
-            line = "G0 Z{}\n;LAYER:{}".format(points[index+1][2], index+1)
-            moves.append(line)
-        else:
-            line = "G0 Z{}\n;LAYER:{}".format(points[index+1][2], index+1)
-            moves.append(line) 
-    """
 
     return moves
 
@@ -133,12 +117,12 @@ def main():
     x, y, z = find_lower_value(points)
     points = adding_lower_bound(points, x, y, z)
 
-    print(points)
-    print_points(calc_dist_of_points(points))
-    """
-    order by nearest points
+    fill = calc_dist_of_points(points)
+    moves = create_moves(points, fill)
     
-    """
+    # generates gcode
+    create_file(moves)
+
 
 
 if __name__ == '__main__':
