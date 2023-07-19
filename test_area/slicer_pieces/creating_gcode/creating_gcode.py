@@ -1,11 +1,6 @@
 from demopoints import test_points
 import math
 
-def gcode(points):
-    for layer in points:
-        for point in layer:
-
-            pass
 
 def calc_dist_of_points(points):
     dist_arr = []
@@ -81,26 +76,31 @@ def create_moves(points, fill):
     
     for layer_index, layer in enumerate(points):
         for point_index, point in enumerate(layer):
-            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[0][0])
+            # list index out of range bug 
+            # line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
             
         # layer hopp 
         # fix last layer hopp bug list index out of range
-        line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
-        moves.append(line)
-
+        # find more elegant way to do it 
+        try:
+            line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
+            moves.append(line)
+        except: 
+            pass
 
     return moves
 
 def create_file(moves):
 
-    with open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/top_gcode.txt') as f:
+    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/top_gcode.txt') as f:
         top = f.readlines()
 
-    with open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/end_gcode.txt') as f:
+    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/end_gcode.txt') as f:
         end = f.readlines()
 
-    file = open('H:/Projekte/Projekte/Project 137/stl_test/generate_gcode_simple/gcode.gcode', 'w+')
+    file = open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/gcode.gcode', 'w+')
 
     for char in top:
         file.write(char)
