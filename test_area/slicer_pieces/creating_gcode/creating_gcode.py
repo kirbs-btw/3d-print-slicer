@@ -63,11 +63,8 @@ def dist(point_a, point_b):
     x2 = point_a[2] - point_b[2]
 
     dist = math.sqrt(x0**2 + x1**2 + x2**2)
-    return dist
 
-def print_points(points):
-    for i in points:
-        print(i)
+    return dist
 
 def create_moves(points, fill):
     extrusion = fill
@@ -78,11 +75,10 @@ def create_moves(points, fill):
         for point_index, point in enumerate(layer):
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[0][0])
             # list index out of range bug 
-            # line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
             
         # layer hopp 
-        # fix last layer hopp bug list index out of range
         # find more elegant way to do it 
         try:
             line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
