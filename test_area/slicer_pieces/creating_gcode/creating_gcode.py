@@ -75,16 +75,13 @@ def create_moves(points, fill):
         for point_index, point in enumerate(layer):
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[0][0])
             # list index out of range bug 
-            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
-            moves.append(line)
             
-        # layer hopp 
-        # find more elegant way to do it 
-        try:
+            # line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
+            moves.append(line)
+        
+        if layer_index + 1 < (len(points) - 1):
             line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
             moves.append(line)
-        except: 
-            pass
 
     return moves
 
@@ -114,6 +111,7 @@ def main():
     points = adding_lower_bound(points, x, y, z)
 
     fill = calc_dist_of_points(points)
+
     moves = create_moves(points, fill)
     
     # generates gcode
