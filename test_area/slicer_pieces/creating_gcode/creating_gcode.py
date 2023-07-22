@@ -6,7 +6,7 @@ def calc_dist_of_points(points):
     dist_arr = []
     for i, layer in enumerate(points):
         layer_dist = []
-        for j in range(len(layer)-2):
+        for j in range(len(layer)-1):
             dist_var = dist(points[i][j], points[i][j+1])
             layer_dist.append(round(dist_var, 5))
         layer_dist.append(dist(points[i][-1], points[i][0]))
@@ -75,8 +75,7 @@ def create_moves(points, fill):
         for point_index, point in enumerate(layer):
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[0][0])
             # list index out of range bug 
-            
-            # line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
         
         if layer_index + 1 < (len(points) - 1):
