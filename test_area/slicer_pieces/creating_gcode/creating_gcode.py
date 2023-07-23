@@ -56,6 +56,22 @@ def nrml_points(points):
 
     return new_points
 
+def add_dim(points, n):
+    new_points = []
+    for layer in points:
+        new_layer = []
+        for point in layer:
+            x1 = point[0] * n
+            x2 = point[1] * n
+            x3 = point[2] * n
+            
+            new_point = [x1, x2, x3]
+            new_layer.append(new_point)
+
+        new_points.append(new_layer)
+    
+    return new_points
+
 
 def dist(point_a, point_b):
     x0 = point_a[0] - point_b[0]
@@ -73,8 +89,6 @@ def create_moves(points, fill):
     
     for layer_index, layer in enumerate(points):
         for point_index, point in enumerate(layer):
-            line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[0][0])
-            # list index out of range bug 
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
         
@@ -106,6 +120,7 @@ def create_file(moves):
 
 def main():
     points = test_points.cube_points
+    points = add_dim(points)
     x, y, z = find_lower_value(points)
     points = adding_lower_bound(points, x, y, z)
 
