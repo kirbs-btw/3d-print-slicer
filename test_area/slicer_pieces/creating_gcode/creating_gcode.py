@@ -27,13 +27,13 @@ def find_lower_value(points):
 
     return x, y, z
 
-def adding_lower_bound(points, x, y, z):
+def adding_lower_bound(points, x, y, z, offset = 0):
     new_points = []
     for layer in points:
         new_layer = []
         for point in layer:
-            x1 = point[0] - x
-            x2 = point[1] - y
+            x1 = point[0] - x + offset
+            x2 = point[1] - y + offset
             x3 = point[2] - z
             
 
@@ -56,14 +56,14 @@ def nrml_points(points):
 
     return new_points
 
-def add_dim(points, n):
+def add_dim(points, x, y, z):
     new_points = []
     for layer in points:
         new_layer = []
         for point in layer:
-            x1 = point[0] * n
-            x2 = point[1] * n
-            x3 = point[2] * n
+            x1 = point[0] * x * 0.5
+            x2 = point[1] * y * 0.5
+            x3 = point[2] * z * 0.5
             
             new_point = [x1, x2, x3]
             new_layer.append(new_point)
@@ -100,13 +100,13 @@ def create_moves(points, fill):
 
 def create_file(moves):
 
-    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/top_gcode.txt') as f:
+    with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/top_gcode.txt') as f:
         top = f.readlines()
 
-    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/end_gcode.txt') as f:
+    with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/end_gcode.txt') as f:
         end = f.readlines()
 
-    file = open('F:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/gcode.gcode', 'w+')
+    file = open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/gcode.gcode', 'w+')
 
     for char in top:
         file.write(char)
@@ -120,9 +120,10 @@ def create_file(moves):
 
 def main():
     points = test_points.cube_points
-    points = add_dim(points)
+    points = add_dim(points, 10, 10, 10)
     x, y, z = find_lower_value(points)
-    points = adding_lower_bound(points, x, y, z)
+    
+    points = adding_lower_bound(points, x, y, z, offset = 50)
 
     fill = calc_dist_of_points(points)
 
