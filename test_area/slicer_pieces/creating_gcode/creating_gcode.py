@@ -2,16 +2,34 @@ from demopoints import test_points
 import math
 
 
-def calc_dist_of_points(points):
+def calc_dist_of_points(points, factor=1):
     dist_arr = []
     for i, layer in enumerate(points):
         layer_dist = []
         for j in range(len(layer)-1):
             dist_var = dist(points[i][j], points[i][j+1])
-            layer_dist.append(round(dist_var, 5))
+            layer_dist.append(round(dist_var, 5) * factor)
         layer_dist.append(dist(points[i][-1], points[i][0]))
         dist_arr.append(layer_dist)
     return dist_arr
+
+def calc_fill(dist_arr):
+    fill = []
+    count = 0
+    for layer_dist in dist_arr:
+        fill_layer = []
+        for dist in layer_dist:
+            fill_layer.append(count + dist)
+            count += dist
+        fill.append(fill_layer)
+
+    return fill
+
+def calc_extrusion(points, fac = 1):
+    dist_arr = calc_dist_of_points(points, factor = fac)
+    extrusion = calc_fill(dist_arr)
+
+    return extrusion
 
 def find_lower_value(points):
     x, y, z = points[0][0][0], points[0][0][1], points[0][0][2]
@@ -120,14 +138,14 @@ def create_file(moves):
 
 def main():
     points = test_points.cube_points
-    points = add_dim(points, 10, 10, 10)
+    points = points[::-1]
+    points = add_dim(points, 30, 10, 50)
     x, y, z = find_lower_value(points)
     
     points = adding_lower_bound(points, x, y, z, offset = 50)
+    extrusion = calc_extrusion(points, fac = 0.5)
 
-    fill = calc_dist_of_points(points)
-
-    moves = create_moves(points, fill)
+    moves = create_moves(points, extrusion)
     
     # generates gcode
     create_file(moves)
