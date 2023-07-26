@@ -139,11 +139,11 @@ def create_file(moves):
 def main():
     points = test_points.cube_points
     points = points[::-1]
-    points = add_dim(points, 30, 10, 50)
+    points = add_dim(points, 30, 10, 90)
     x, y, z = find_lower_value(points)
     
     points = adding_lower_bound(points, x, y, z, offset = 50)
-    extrusion = calc_extrusion(points, fac = 0.5)
+    extrusion = calc_extrusion(points, fac = 5)
 
     moves = create_moves(points, extrusion)
     
