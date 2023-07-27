@@ -66,6 +66,7 @@ class line:
         
         return [x1, x2, x3]
 
+
 def create_line(mesh):
     # array to hold all conections between triangles
     lines = []
@@ -80,6 +81,40 @@ def create_line(mesh):
         lines.append(lineThree)
 
     return lines
+
+def lines_are_the_same(lineA, lineB):
+
+
+    if lineA.supportV == lineB.supportV and lineA.directionV == lineB.directionV:
+        return True
+    elif True:
+        """
+        condition for lines that are the same
+        """
+        pass
+        
+
+
+    return False
+
+def del_duplicate(lines):
+    """
+    deletes the duplicate lines
+    stl saves points duplicate
+    """
+
+    new_lines = []
+
+    for line in lines: 
+        switch = False
+        for saved_line in new_lines:
+            if lines_are_the_same(saved_line, line):
+                switch = True
+                
+        if not switch:
+            new_lines.append(line)
+
+
 
 def slice_z(lines):
     """
@@ -99,7 +134,6 @@ def slice_z(lines):
     points = []
     
 
-
     for layer_hight in range(40):
         layer_points = []
         layer_hight = (layer_hight / 20) - 2
@@ -111,6 +145,7 @@ def slice_z(lines):
         if layer_points != []:
             points.append(layer_points)
     return points
+
 
 
 def show_points(points):
