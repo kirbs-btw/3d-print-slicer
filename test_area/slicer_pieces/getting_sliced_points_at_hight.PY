@@ -114,7 +114,7 @@ def del_duplicate(lines):
         if not switch:
             new_lines.append(line)
 
-
+    return new_lines
 
 def slice_z(lines):
     """
@@ -163,6 +163,7 @@ def main():
     # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
+    lines = del_duplicate(lines)
     points = slice_z(lines)
     print(points)
     show_points(points)
