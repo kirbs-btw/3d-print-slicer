@@ -164,7 +164,14 @@ def create_file(moves):
 def main():
     points = test_points.cube_points
     points = points[::-1]
+
+    """
+    order by dist 
+    only use with ceartain usecase 
+    further test requiered 
+    """
     points = order_by_dist(points)
+    
     points = add_dim(points, 30, 10, 90)
     x, y, z = find_lower_value(points)
     
