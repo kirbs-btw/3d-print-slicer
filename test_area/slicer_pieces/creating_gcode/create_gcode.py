@@ -21,6 +21,11 @@ def calc_fill(dist_arr):
         for dist in layer_dist:
             fill_layer.append(count + dist)
             count += dist
+        
+        save = fill_layer[0]
+        fill_layer.pop(0)
+        fill_layer.extend([save])
+
         fill.append(fill_layer)
 
     return fill
@@ -170,13 +175,13 @@ def main():
     only use with ceartain usecase 
     further test requiered 
     """
-    points = order_by_dist(points)
+    # points = order_by_dist(points)
     
-    points = add_dim(points, 30, 10, 90)
+    points = add_dim(points, 40, 40, 40)
     x, y, z = find_lower_value(points)
     
     points = adding_lower_bound(points, x, y, z, offset = 50)
-    extrusion = calc_extrusion(points, fac = 5)
+    extrusion = calc_extrusion(points, fac = 0.00000001)
 
     moves = create_moves(points, extrusion)
     
