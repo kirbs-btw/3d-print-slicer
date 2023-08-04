@@ -97,6 +97,17 @@ def lines_are_the_same(lineA, lineB):
 
     return False
 
+
+
+def del_z_plane_lines(lines):
+    new_lines = lines
+
+    for line in new_lines:
+        pass
+
+    return new_lines
+
+
 def del_duplicate(lines):
     """
     deletes the duplicate lines
@@ -115,6 +126,10 @@ def del_duplicate(lines):
             new_lines.append(line)
 
     return new_lines
+
+def del_redundant(lines):
+    lines = del_z_plane_lines(lines)
+    lines = del_duplicate(lines)
 
 def slice_z(lines):
     """
@@ -163,7 +178,7 @@ def main():
     # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
     lines = create_line(cube)
-    lines = del_duplicate(lines)
+    lines = del_redundant(lines)
     points = slice_z(lines)
     print(points)
     show_points(points)
