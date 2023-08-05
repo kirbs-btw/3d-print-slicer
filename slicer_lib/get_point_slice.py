@@ -103,7 +103,8 @@ def del_z_plane_lines(lines):
     new_lines = lines
 
     for line in new_lines:
-        pass
+        if line.upper_bound == line.lower_bound:
+            new_lines.remove(line)
 
     return new_lines
 
