@@ -172,7 +172,14 @@ def show_points(points):
 
     point_cloud = pv.PolyData(point_list)
     point_cloud.plot(eye_dome_lighting=True)
-    
+
+def get_points_from_stl(stl_obj):
+    lines = create_line(stl_obj)
+    lines = del_redundant(lines)
+    points = slice_z(lines)
+
+    return points
+
 
 def main():
     stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
