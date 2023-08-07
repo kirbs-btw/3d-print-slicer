@@ -192,6 +192,5 @@ def main():
     show_points(points)
     
 
-
 if __name__ == "__main__":
     main()
