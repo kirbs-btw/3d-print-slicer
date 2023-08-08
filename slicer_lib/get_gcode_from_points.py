@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 
 def calc_dist_of_points(points, factor=1):
     dist_arr = []
@@ -146,24 +146,25 @@ def create_moves(points, fill):
 
     return moves
 
-def create_file(moves):
+def create_gcode_array(moves):
 
     with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/top_gcode.txt') as f:
-        top = f.readlines()
+        top = np.array(f.readlines())
 
     with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/end_gcode.txt') as f:
-        end = f.readlines()
+        end = np.array(f.readlines())
+    
+    gcode_array = []
 
-    file = open('H:/Projekte/Projekte/Project 137/3d-print-slicer/test_area/slicer_pieces/creating_gcode/gcode.gcode', 'w+')
+    for line in top:
+        gcode_array.append(line)
+    for line in moves:
+        gcode_array.append(line)
+    for line in end:
+        gcode_array.append(line)
 
-    for char in top:
-        file.write(char)
+    return gcode_array
 
-    for char in moves:
-        file.write('\n{}'.format(char))
-
-    for char in end:
-        file.write(char)
 
 def create_gcode(points = [], save_path = '', x_dim=1, y_dim=1, z_dim=1, plate_shift=1):
     points = points[::-1]
@@ -173,9 +174,8 @@ def create_gcode(points = [], save_path = '', x_dim=1, y_dim=1, z_dim=1, plate_s
     points = adding_lower_bound(points, x, y, z, offset = plate_shift)
     extrusion = calc_extrusion(points, fac = 0.00000001)
     moves = create_moves(points, extrusion)
-    # generates gcode
-    # create_file(moves)
-    
-    return 
+    gcode_array = create_gcode_array(moves)
+
+    return gcode_array 
 
 
