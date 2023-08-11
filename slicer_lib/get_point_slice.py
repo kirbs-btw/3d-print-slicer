@@ -130,7 +130,8 @@ def del_duplicate(lines):
 
 def del_redundant(lines):
     lines = del_z_plane_lines(lines)
-    lines = del_duplicate(lines)
+    # lines = del_duplicate(lines)
+    return lines
 
 def slice_z(lines):
     """
@@ -173,7 +174,11 @@ def show_points(points):
     point_cloud = pv.PolyData(point_list)
     point_cloud.plot(eye_dome_lighting=True)
 
-def get_points_from_stl(stl_obj):
+def add_dim(stl_obj, x_dim, y_dim, z_dim):
+    pass
+
+def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1):
+    add_dim(stl_obj, x_dim, y_dim, z_dim)
     lines = create_line(stl_obj)
     lines = del_redundant(lines)
     points = slice_z(lines)
