@@ -24,7 +24,7 @@ def main():
     save_path = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/save/'
 
     stl_obj = mesh.Mesh.from_file(file_path)
-    points = sp.get_points_from_stl(stl_obj)
+    points = sp.get_points_from_stl(stl_obj, layer_hight=layer_hight, x_dim=x_dim, y_dim=y_dim, z_dim=z_dim)
     gcode = cg.create_gcode(points=points, x_dim=x_dim, y_dim=y_dim, z_dim=z_dim, plate_shift=plate_shift)
     save_gcode(gcode, save_path=save_path, file_name=file_name)
 
