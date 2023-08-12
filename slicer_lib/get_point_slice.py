@@ -175,7 +175,15 @@ def show_points(points):
     point_cloud.plot(eye_dome_lighting=True)
 
 def add_dim(stl_obj, x_dim, y_dim, z_dim):
-    pass
+    new_triangles = []
+
+    for triangle in stl_obj.vectors:
+        v1 = [triangle[0][0]*x_dim, triangle[0][1]*y_dim, triangle[0][2]*z_dim]
+        v2 = [triangle[1][0]*x_dim, triangle[1][1]*y_dim, triangle[1][2]*z_dim]
+        v3 = [triangle[2][0]*x_dim, triangle[2][1]*y_dim, triangle[2][2]*z_dim]
+        new_triangles.append([v1, v2, v3])
+
+    return new_triangles
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1):
     add_dim(stl_obj, x_dim, y_dim, z_dim)
