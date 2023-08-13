@@ -7,3 +7,8 @@ defining lines and slicing with them the layers
 
 # Files
 Still work in progress sorted work will be comming soon 
+
+# Work in Progress
+Let the path be defined by the vector
+not the nearest. 
+missing parts bug 
