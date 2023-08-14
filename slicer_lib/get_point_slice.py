@@ -72,7 +72,7 @@ def create_line(mesh):
     lines = []
 
     # creates the conecting lines between the triangles of the mesh
-    for triangle in mesh.vectors:
+    for triangle in mesh:
         lineOne = line(triangle[0], triangle[1])
         lineTwo = line(triangle[0], triangle[2])
         lineThree = line(triangle[1], triangle[2])
@@ -133,7 +133,7 @@ def del_redundant(lines):
     # lines = del_duplicate(lines)
     return lines
 
-def slice_z(lines):
+def slice_z(lines, layer_hight):
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model 
@@ -174,6 +174,21 @@ def show_points(points):
     point_cloud = pv.PolyData(point_list)
     point_cloud.plot(eye_dome_lighting=True)
 
+def find_lower_value(points):
+    # refactor this part to the shape of the v3 array
+    x, y, z = points[0][0][0], points[0][0][1], points[0][0][2]
+    for layer in points:
+        for point in layer:
+            if point[0] < x:
+                x = point[0]
+            if point[1] < y:
+                y = point[1]
+            if point[2] < z:
+                z = point[2]
+ 
+
+    return x, y, z
+
 def add_dim(stl_obj, x_dim, y_dim, z_dim):
     new_triangles = []
 
@@ -185,11 +200,39 @@ def add_dim(stl_obj, x_dim, y_dim, z_dim):
 
     return new_triangles
 
+def adding_lower_bound(points, x, y, z, offset = 0):
+    new_points = []
+    for layer in points:
+        new_layer = []
+        for point in layer:
+            x1 = point[0] - x + offset
+            x2 = point[1] - y + offset
+            x3 = point[2] - z
+            
+
+            new_point = [x1, x2, x3]
+            new_layer.append(new_point)
+
+        new_points.append(new_layer)
+    
+    return new_points
+
+def nrml_points(points):
+    points = []
+
+    x, y, z = find_lower_value(points)
+    adding_lower_bound(points, x, y, z)
+
+    new_points = []
+
+    return new_points
+
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1):
-    add_dim(stl_obj, x_dim, y_dim, z_dim)
-    lines = create_line(stl_obj)
+    triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
+    triangles = nrml_points(triangles)
+    lines = create_line(triangles)
     lines = del_redundant(lines)
-    points = slice_z(lines)
+    points = slice_z(lines, layer_hight)
 
     return points
 
