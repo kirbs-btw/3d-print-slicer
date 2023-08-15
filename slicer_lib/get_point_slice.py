@@ -201,21 +201,16 @@ def add_dim(stl_obj, x_dim, y_dim, z_dim):
     return new_triangles
 
 def adding_lower_bound(points, x, y, z, offset = 0):
-    new_points = []
-    for layer in points:
-        new_layer = []
-        for point in layer:
-            x1 = point[0] - x + offset
-            x2 = point[1] - y + offset
-            x3 = point[2] - z
-            
+    new_triangles = []
 
-            new_point = [x1, x2, x3]
-            new_layer.append(new_point)
+    for triangle in points:
+        v1 = [triangle[0][0] - x + offset, triangle[0][1] - y + offset, triangle[0][2] - z]
+        v2 = [triangle[1][0] - x + offset, triangle[1][1] - y + offset, triangle[1][2] - z]
+        v3 = [triangle[2][0] - x + offset, triangle[2][1] - y + offset, triangle[2][2] - z]
+        new_triangles.append([v1, v2, v3])
 
-        new_points.append(new_layer)
-    
-    return new_points
+    return new_triangles
+
 
 def nrml_points(points):
     points = []
