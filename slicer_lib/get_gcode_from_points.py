@@ -35,66 +35,6 @@ def calc_extrusion(points, fac = 1):
 
     return extrusion
 
-def find_lower_value(points):
-    x, y, z = points[0][0][0], points[0][0][1], points[0][0][2]
-    for layer in points:
-        for point in layer:
-            if point[0] < x:
-                x = point[0]
-            if point[1] < y:
-                y = point[1]
-            if point[2] < z:
-                z = point[2]
- 
-
-    return x, y, z
-
-def adding_lower_bound(points, x, y, z, offset = 0):
-    new_points = []
-    for layer in points:
-        new_layer = []
-        for point in layer:
-            x1 = point[0] - x + offset
-            x2 = point[1] - y + offset
-            x3 = point[2] - z
-            
-
-            new_point = [x1, x2, x3]
-            new_layer.append(new_point)
-
-        new_points.append(new_layer)
-    
-    return new_points
-
-def nrml_points(points):
-    points = []
-
-    x, y, z = find_lower_value(points)
-    adding_lower_bound(points, x, y, z)
-
-
-
-    new_points = []
-
-    return new_points
-
-def add_dim(points, x, y, z):
-    new_points = []
-    for layer in points:
-        new_layer = []
-        for point in layer:
-            x1 = point[0] * x * 0.5
-            x2 = point[1] * y * 0.5
-            x3 = point[2] * z * 0.5
-            
-            new_point = [x1, x2, x3]
-            new_layer.append(new_point)
-
-        new_points.append(new_layer)
-    
-    return new_points
-
-
 def dist(point_a, point_b):
     x0 = point_a[0] - point_b[0]
     x1 = point_a[1] - point_b[1]
@@ -166,16 +106,10 @@ def create_gcode_array(moves):
     return gcode_array
 
 
-def create_gcode(points = [], save_path = '', x_dim=1, y_dim=1, z_dim=1, plate_shift=1):
+def create_gcode(points = []):
     points = points[::-1]
-    # points = order_by_dist(points)
-    points = add_dim(points, x_dim, y_dim, z_dim)
-    x, y, z = find_lower_value(points)
-    points = adding_lower_bound(points, x, y, z, offset = plate_shift)
     extrusion = calc_extrusion(points, fac = 0.00000001)
     moves = create_moves(points, extrusion)
     gcode_array = create_gcode_array(moves)
 
-    return gcode_array 
-
-
+    return gcode_array
