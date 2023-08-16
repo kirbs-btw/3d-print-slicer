@@ -175,17 +175,19 @@ def show_points(points):
     point_cloud.plot(eye_dome_lighting=True)
 
 def find_lower_value(points):
-    # refactor this part to the shape of the v3 array
-    x, y, z = points[0][0][0], points[0][0][1], points[0][0][2]
-    for layer in points:
-        for point in layer:
-            if point[0] < x:
-                x = point[0]
-            if point[1] < y:
-                y = point[1]
-            if point[2] < z:
-                z = point[2]
- 
+    x = points[0][0][0]
+    y = points[0][0][1]
+    z = points[0][0][2]
+
+    for triangle in points:
+
+        for vector in triangle:
+            if x > vector[0]:
+                x = vector[0]
+            if y > vector[1]:
+                y = vector[1]
+            if z > vector[2]:
+                z = vector[2]
 
     return x, y, z
 
@@ -200,7 +202,7 @@ def add_dim(stl_obj, x_dim, y_dim, z_dim):
 
     return new_triangles
 
-def adding_lower_bound(points, x, y, z, offset = 0):
+def adding_lower_bound(points, x, y, z, offset=100):
     new_triangles = []
 
     for triangle in points:
@@ -212,19 +214,15 @@ def adding_lower_bound(points, x, y, z, offset = 0):
     return new_triangles
 
 
-def nrml_points(points):
-    points = []
-
+def nrml_points(points, offset):
     x, y, z = find_lower_value(points)
-    adding_lower_bound(points, x, y, z)
+    points = adding_lower_bound(points, x, y, z, offset)
 
-    new_points = []
+    return points
 
-    return new_points
-
-def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1):
+def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
-    triangles = nrml_points(triangles)
+    triangles = nrml_points(triangles, offset)
     lines = create_line(triangles)
     lines = del_redundant(lines)
     points = slice_z(lines, layer_hight)
