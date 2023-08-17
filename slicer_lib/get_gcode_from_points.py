@@ -107,7 +107,7 @@ def create_gcode_array(moves):
 
 
 def create_gcode(points = []):
-    points = points[::-1]
+    # points = points[::-1]
     extrusion = calc_extrusion(points, fac = 0.00000001)
     moves = create_moves(points, extrusion)
     gcode_array = create_gcode_array(moves)
