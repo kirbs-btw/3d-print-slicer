@@ -42,14 +42,14 @@ class line:
 
         sup.x3 + dir.x3 * v = h
         dir.x3 * v = h - sup.x3
-        v = (h / sup.x3) / dir.x3   => dir.x3 != 0
+        v = (h - sup.x3) / dir.x3   => dir.x3 != 0
         
         """
         if self.directionV[2] == 0:
             return None
 
 
-        v = (h / self.supportV[2]) / self.directionV[2] 
+        v = (h - self.supportV[2]) / self.directionV[2] 
 
         """
         placing v in equation
@@ -87,6 +87,7 @@ def lines_are_the_same(lineA, lineB):
 
     if lineA.supportV == lineB.supportV and lineA.directionV == lineB.directionV:
         return True
+    
     elif True:
         """
         condition for lines that are the same
@@ -147,20 +148,19 @@ def slice_z(lines, layer_hight):
     overlapping edges 
     
     """
-
     points = []
     
 
-    for layer_hight in range(40):
+    for layer_hight in range(100):
         layer_points = []
-        layer_hight = (layer_hight / 20) - 2
-        print(layer_hight)
+        layer_hight = layer_hight
         for line in lines:
             point = line.calcVfromH(layer_hight)
             if point != None: 
                 layer_points.append(point)
         if layer_points != []:
             points.append(layer_points)
+    
     return points
 
 
@@ -192,6 +192,11 @@ def find_lower_value(points):
     return x, y, z
 
 def add_dim(stl_obj, x_dim, y_dim, z_dim):
+    x_dim /= 2
+    y_dim /= 2
+    z_dim /= 2
+
+
     new_triangles = []
 
     for triangle in stl_obj.vectors:
@@ -231,15 +236,23 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
 
 
 def main():
+    """
+        stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+        # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+        cube = mesh.Mesh.from_file(stl_file)
+        lines = create_line(cube)
+        lines = del_redundant(lines)
+        points = slice_z(lines)
+        print(points)
+        show_points(points)
+    """
+
     stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     cube = mesh.Mesh.from_file(stl_file)
-    lines = create_line(cube)
-    lines = del_redundant(lines)
-    points = slice_z(lines)
-    print(points)
+    points = get_points_from_stl(cube, x_dim=100, y_dim=100, z_dim=100)
+    print("the points{}".format(points))
     show_points(points)
-    
+
 
 if __name__ == "__main__":
     main()
