@@ -1,6 +1,14 @@
 import math
 import numpy as np
 
+"""
+changing something in the dist algorithm 
+to correct the last missing line shifting all 
+extrusions by one   
+
+"""
+
+
 def calc_dist_of_points(points, factor=1):
     dist_arr = []
     for i, layer in enumerate(points):
@@ -21,10 +29,12 @@ def calc_fill(dist_arr):
             fill_layer.append(count + dist)
             count += dist
         
+        
+        # shifst all by one
         save = fill_layer[0]
         fill_layer.pop(0)
         fill_layer.extend([save])
-
+        
         fill.append(fill_layer)
 
     return fill
@@ -38,10 +48,10 @@ def calc_extrusion(points, fac = 1):
 def dist(point_a, point_b):
     x0 = point_a[0] - point_b[0]
     x1 = point_a[1] - point_b[1]
-    x2 = point_a[2] - point_b[2]
+    # x2 = point_a[2] - point_b[2]
 
-    dist = math.sqrt(x0**2 + x1**2 + x2**2)
-
+    # dist = math.sqrt(x0**2 + x1**2 + x2**2)
+    dist = math.sqrt(x0**2 + x1**2)
     return dist
 
 def order_by_dist(points):
@@ -108,7 +118,7 @@ def create_gcode_array(moves):
 
 def create_gcode(points = []):
     # points = points[::-1]
-    extrusion = calc_extrusion(points, fac = 0.00000001)
+    extrusion = calc_extrusion(points, fac = 0.01)
     moves = create_moves(points, extrusion)
     gcode_array = create_gcode_array(moves)
 
