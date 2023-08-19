@@ -2,39 +2,33 @@ import math
 import numpy as np
 
 """
-changing something in the dist algorithm 
-to correct the last missing line shifting all 
-extrusions by one   
+issue: 
+skipping 0.1mm hight 
 
 """
 
-
-def calc_dist_of_points(points, factor=1):
+def calc_dist_of_points(points, factor=1) -> list:
     dist_arr = []
-    for i, layer in enumerate(points):
-        layer_dist = []
-        for j in range(len(layer)-1):
-            dist_var = dist(points[i][j], points[i][j+1])
-            layer_dist.append(round(dist_var, 5) * factor)
-        layer_dist.append(dist(points[i][-1], points[i][0]))
-        dist_arr.append(layer_dist)
+    for layer in points:
+        dist_layer = [0]
+        for point_index in range(len(layer)-1):
+            # appends dist of next points with a factor 
+            dist_layer.append(dist(layer[point_index], layer[point_index + 1]) * factor) 
+
+        dist_arr.append(dist_layer)
+
+
     return dist_arr
 
-def calc_fill(dist_arr):
+
+def calc_fill(dist_arr) -> list:
     fill = []
-    count = 0
-    for layer_dist in dist_arr:
+    save = 0
+    for layer in dist_arr:
         fill_layer = []
-        for dist in layer_dist:
-            fill_layer.append(count + dist)
-            count += dist
-        
-        
-        # shifst all by one
-        save = fill_layer[0]
-        fill_layer.pop(0)
-        fill_layer.extend([save])
-        
+        for dist in layer:
+            fill_layer.append(dist + save)
+            save += dist
         fill.append(fill_layer)
 
     return fill
@@ -45,13 +39,16 @@ def calc_extrusion(points, fac = 1):
 
     return extrusion
 
-def dist(point_a, point_b):
+def dist(point_a, point_b) -> float:
+    """
+    calc dist of point_a to point_b in z plane
+    """
+
     x0 = point_a[0] - point_b[0]
     x1 = point_a[1] - point_b[1]
-    # x2 = point_a[2] - point_b[2]
 
-    # dist = math.sqrt(x0**2 + x1**2 + x2**2)
     dist = math.sqrt(x0**2 + x1**2)
+
     return dist
 
 def order_by_dist(points):
@@ -87,6 +84,8 @@ def create_moves(points, fill):
     
     for layer_index, layer in enumerate(points):
         for point_index, point in enumerate(layer):
+            print(len(layer))
+            print(len(extrusion))
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
         
