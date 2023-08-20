@@ -76,7 +76,19 @@ def order_by_dist(points):
     
     return new_points
 
+def create_moves(points, fill):
+    moves = []
 
+    for layer_index, layer in enumerate(points):
+        line = "G0 Z{}\n;LAYER:{}".format(points[layer_index][0][2], (layer_index + 1))
+        moves.append(line)
+        for point_index, point in enumerate(layer):
+            line = "G1 X{} Y{} E{}".format(point[0], point[1], fill[layer_index][point_index])
+            moves.append(line)
+
+    return moves
+    
+"""
 def create_moves(points, fill):
     extrusion = fill
     moves = []
@@ -84,8 +96,7 @@ def create_moves(points, fill):
     
     for layer_index, layer in enumerate(points):
         for point_index, point in enumerate(layer):
-            print(len(layer))
-            print(len(extrusion))
+            
             line = "G1 X{} Y{} E{}".format(point[0], point[1], extrusion[layer_index][point_index])
             moves.append(line)
         
@@ -93,7 +104,9 @@ def create_moves(points, fill):
             line = "G0 Z{}\n;LAYER:{}".format(points[layer_index+1][0][2], (layer_index + 1))
             moves.append(line)
 
-    return moves
+    return move
+"""
+    
 
 def create_gcode_array(moves):
 
@@ -117,7 +130,7 @@ def create_gcode_array(moves):
 
 def create_gcode(points = []):
     # points = points[::-1]
-    extrusion = calc_extrusion(points, fac = 0.01)
+    extrusion = calc_extrusion(points, fac = 0.1)
     moves = create_moves(points, extrusion)
     gcode_array = create_gcode_array(moves)
 
