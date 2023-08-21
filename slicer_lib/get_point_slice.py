@@ -48,12 +48,10 @@ class line:
         if self.directionV[2] == 0:
             return None
 
-
         v = (h - self.supportV[2]) / self.directionV[2] 
 
         """
         placing v in equation
-
         """
         x3 = self.supportV[2] + self.directionV[2] * v
 
@@ -83,19 +81,10 @@ def create_line(mesh):
     return lines
 
 def lines_are_the_same(lineA, lineB):
-
-
     if lineA.supportV == lineB.supportV and lineA.directionV == lineB.directionV:
         return True
-    
-    elif True:
-        """
-        condition for lines that are the same
-        """
-        pass
-        
-
-
+    # further checks 
+          
     return False
 
 
@@ -134,13 +123,13 @@ def del_redundant(lines):
     # lines = del_duplicate(lines)
     return lines
 
-def slice_z(lines, layer_hight):
+def slice_z(lines, layer_hight, layer_count):
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model 
 
     optimization
-    - no real problem by now, algorithm is fast enough big models lode like one second
+    - no real problem by now, algorithm is fast enough big models load like one second
 
     - could be optimized by excluding lines that are in one z plane and have no real hight
     - excluding lines with smaler upperbound than the hight we are checking 
@@ -150,8 +139,17 @@ def slice_z(lines, layer_hight):
     """
     points = []
     
+    """
+    thinkint layerhight calc
 
-    for layer_hight in range(100):
+    if 0.1 div by 10
+    if 0.2 div by 5
+
+    """
+
+
+    for layer_hight in range(layer_count):
+        layer_hight /= 5
         layer_points = []
         layer_hight = layer_hight
         for line in lines:
@@ -160,7 +158,7 @@ def slice_z(lines, layer_hight):
                 layer_points.append(point)
         if layer_points != []:
             points.append(layer_points)
-    
+
     return points
 
 
@@ -226,11 +224,13 @@ def nrml_points(points, offset):
     return points
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
+    layer_count = z_dim / layer_hight
+
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     lines = create_line(triangles)
     lines = del_redundant(lines)
-    points = slice_z(lines, layer_hight)
+    points = slice_z(lines, layer_hight, layer_count)
 
     return points
 
