@@ -123,7 +123,7 @@ def del_redundant(lines):
     # lines = del_duplicate(lines)
     return lines
 
-def slice_z(lines, layer_hight, layer_count):
+def slice_z(lines, layer_hight = 0.1, layer_count = 0):
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model 
@@ -139,28 +139,19 @@ def slice_z(lines, layer_hight, layer_count):
     """
     points = []
     
-    """
-    thinkint layerhight calc
 
-    if 0.1 div by 10
-    if 0.2 div by 5
-
-    """
-
-
-    for layer_hight in range(layer_count):
-        layer_hight /= 5
+    for layer_count in range(int(round(layer_count))):
+        slice_hight = layer_count / (1 / layer_hight) # layerhight factor
         layer_points = []
-        layer_hight = layer_hight
+
         for line in lines:
-            point = line.calcVfromH(layer_hight)
+            point = line.calcVfromH(slice_hight)
             if point != None: 
                 layer_points.append(point)
         if layer_points != []:
             points.append(layer_points)
 
     return points
-
 
 
 def show_points(points):
