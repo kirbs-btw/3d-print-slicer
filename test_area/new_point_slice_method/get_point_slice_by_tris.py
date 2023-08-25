@@ -109,19 +109,33 @@ def nrml_points(points, offset):
 
     return points
 
+def create_lines(triangles):
+    triangle_lines = []
+
+    for triangle in triangles:
+        face_lines = []
+        lineOne = line(triangle[0], triangle[1])
+        lineTwo = line(triangle[0], triangle[2])
+        lineThree = line(triangle[1], triangle[2])
+        face_lines.append(lineOne)
+        face_lines.append(lineTwo)
+        face_lines.append(lineThree)
+        triangle_lines.append(face_lines)
+
+    return triangle_lines
+
+def slice_z(triangle_lines, layer_hight, layer_count):
+    pass
+
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
-    
-    """
-    lines = create_line(triangles)
-    lines = del_redundant(lines)
-    points = slice_z(lines, layer_hight, layer_count)
+    triangle_lines = create_lines(triangles)
+    points = slice_z(triangle_lines, layer_hight, layer_count)
 
     return points
-    """
   
 def show_points(points):
     point_list = []
