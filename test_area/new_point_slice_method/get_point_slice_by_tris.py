@@ -124,7 +124,36 @@ def create_lines(triangles):
 
     return triangle_lines
 
-def slice_z(triangle_lines, layer_hight, layer_count):
+def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
+    """
+    slices the obj by inserting the hight inside the 
+    line a param and calulating the points at this hight in the model
+
+    issue:
+        -edge case 
+        if layer hits corner of tris there are 3 points from wich are two the same
+        del the equal point   
+    """
+    points = []
+    
+
+    for layer_count in range(int(round(layer_count))):
+        slice_hight = layer_count / (1 / layer_hight) # layerhight factor
+        layer_points = []
+
+        for tris in triangle_lines:
+            tris_points = []
+            for line in tris:
+                point = line.calcVfromH(slice_hight)
+                if point != None:
+                    layer_points.append(tris_points)
+            if tris_points != []:
+                layer_points.append(tris_points)
+        points.append(layer_points)
+        
+    return points
+
+def sort_pairs(point_pairs):
     pass
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
@@ -133,8 +162,8 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
-    points = slice_z(triangle_lines, layer_hight, layer_count)
-
+    point_pairs = slice_z(triangle_lines, layer_hight, layer_count)
+    points = sort_pairs(point_pairs)
     return points
   
 def show_points(points):
