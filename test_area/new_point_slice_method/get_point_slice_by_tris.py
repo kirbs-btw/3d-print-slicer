@@ -153,6 +153,26 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
         
     return points
 
+def points_are_equal(point_a, point_b):
+    """
+    checks is points are equal 
+    function exists to match up lines in sort_pairs()
+    """
+
+    if point_a[0] == point_b[0]:
+        return False
+    if point_a[1] == point_b[1]:
+        return False
+    
+    """
+    not needed because we check only points that are on the same layer
+
+    if point_a[2] == point_b[2]:
+        return False
+    """
+
+    return True
+
 def sort_pairs(point_pairs):
     pass
 
