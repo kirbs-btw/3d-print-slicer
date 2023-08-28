@@ -174,7 +174,36 @@ def points_are_equal(point_a, point_b):
     return True
 
 def sort_pairs(point_pairs):
-    pass
+    """
+    compart/match logic
+
+    exp.:
+        [24, 12]
+        [3, 24]
+        [3, 12]
+
+        -> 24, 12, 12, 3, 3, 24
+    
+    if there is only one loop and not multiple elements
+    for layer in point_pairs:
+        new_layer_points = [layer[0]]
+        while layer != []:
+            checking_element = new_layer_points[-1] 
+            for every pair (exept used ones) in layer:
+                check for equal part in pair
+                    new_layer_points.append(pair)
+
+        reformating new_layer_points to normal plane list of points 
+
+    """
+
+
+
+    points = []
+    for layer in point_pairs:
+        pass
+
+
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
