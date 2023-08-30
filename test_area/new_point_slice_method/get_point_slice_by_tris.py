@@ -173,6 +173,12 @@ def points_are_equal(point_a, point_b):
 
     return True
 
+def point_is_equal_nrml():
+    pass
+
+def point_is_equal_swap():
+    pass
+
 def sort_pairs(point_pairs):
     """
     compart/match logic
@@ -197,11 +203,21 @@ def sort_pairs(point_pairs):
 
     """
 
-
-
     points = []
     for layer in point_pairs:
-        pass
+        new_layer_points = [layer[0]]
+        layer.remove(layer[0])
+        while layer != []:
+            checking_element = new_layer_points[-1]
+            for pair in layer:
+                if point_is_equal_nrml(pair, checking_element):
+                    new_layer_points.append(pair)
+                    layer.remove(pair)
+                elif point_is_equal_swap(pair, checking_element):
+                    layer.remove(pair)
+
+
+    
 
 
 
