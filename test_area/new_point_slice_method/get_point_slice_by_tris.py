@@ -173,11 +173,23 @@ def points_are_equal(point_a, point_b):
 
     return True
 
-def point_is_equal_nrml():
-    pass
+def point_is_equal_nrml(pair_a, pair_b):
+    switch = True 
+    if pair_a[0][0] != pair_b[0][0]:
+        switch = False 
+    if pair_a[0][1] != pair_b[0][1]:
+        switch = False 
+    return switch 
+
 
 def point_is_equal_swap():
-    pass
+    switch = True 
+    if pair_a[0][0] != pair_b[-1][0]:
+        switch = False 
+    if pair_a[0][1] != pair_b[-1][1]:
+        switch = False 
+    
+    return switch 
 
 def sort_pairs(point_pairs):
     """
