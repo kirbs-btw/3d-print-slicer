@@ -182,7 +182,7 @@ def point_is_equal_nrml(pair_a, pair_b):
     return switch 
 
 
-def point_is_equal_swap():
+def point_is_equal_swap(pair_a, pair_b):
     switch = True 
     if pair_a[0][0] != pair_b[-1][0]:
         switch = False 
@@ -226,6 +226,8 @@ def sort_pairs(point_pairs):
                     new_layer_points.append(pair)
                     layer.remove(pair)
                 elif point_is_equal_swap(pair, checking_element):
+                    new_pair = [pair[1], pair[0]]
+                    new_layer_points.append(new_pair)
                     layer.remove(pair)
 
 
