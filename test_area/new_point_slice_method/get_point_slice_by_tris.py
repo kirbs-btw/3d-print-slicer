@@ -191,6 +191,16 @@ def point_is_equal_swap(pair_a, pair_b):
     
     return switch 
 
+def plane_pairs(pair_arr):
+    new_arr = []
+    for layer in pair_arr:
+        for pair in layer: 
+            new_layer = [] 
+            for point in pair:
+                new_layer.append(point)
+        new_arr.append(new_layer)
+    return new_arr 
+
 def sort_pairs(point_pairs):
     """
     compart/match logic
