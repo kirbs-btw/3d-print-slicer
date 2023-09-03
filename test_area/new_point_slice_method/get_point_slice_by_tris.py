@@ -174,22 +174,11 @@ def points_are_equal(point_a, point_b):
     return True
 
 def point_is_equal_nrml(pair_a, pair_b):
-    switch = True 
-    if pair_a[0][0] != pair_b[0][0]:
-        switch = False 
-    if pair_a[0][1] != pair_b[0][1]:
-        switch = False 
-    return switch 
+    return points_are_equal(pair_a[0], pair_b[0])
 
 
-def point_is_equal_swap(pair_a, pair_b):
-    switch = True 
-    if pair_a[0][0] != pair_b[-1][0]:
-        switch = False 
-    if pair_a[0][1] != pair_b[-1][1]:
-        switch = False 
-    
-    return switch 
+def point_is_equal_swap(pair_a, pair_b):    
+    return points_are_equal(pair_a[0], pair_b[-1])
 
 def plane_pairs(pair_arr):
     new_arr = []
@@ -227,11 +216,17 @@ def sort_pairs(point_pairs):
 
     points = []
     for layer in point_pairs:
+        if layer == []:
+            continue
         new_layer_points = [layer[0]]
         layer.remove(layer[0])
-        while layer != []:
+        for _ in range(len(layer)):
             checking_element = new_layer_points[-1]
+            print("new check")
             for pair in layer:
+                if pair == []:
+                    continue
+                print(pair)
                 if point_is_equal_nrml(pair, checking_element):
                     new_layer_points.append(pair)
                     layer.remove(pair)
@@ -239,11 +234,8 @@ def sort_pairs(point_pairs):
                     new_pair = [pair[1], pair[0]]
                     new_layer_points.append(new_pair)
                     layer.remove(pair)
-
-
-    
-
-
+        points.append(new_layer_points)
+    return points
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
