@@ -216,17 +216,18 @@ def sort_pairs(point_pairs):
 
     points = []
     for layer in point_pairs:
+       
         if layer == []:
             continue
         new_layer_points = [layer[0]]
         layer.remove(layer[0])
         for _ in range(len(layer)):
             checking_element = new_layer_points[-1]
-            print("new check")
+            
             for pair in layer:
                 if pair == []:
                     continue
-                print(pair)
+                
                 if point_is_equal_nrml(pair, checking_element):
                     new_layer_points.append(pair)
                     layer.remove(pair)
@@ -243,8 +244,10 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
-    point_pairs = slice_z(triangle_lines, layer_hight, layer_count)
+    point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
+    
     points = sort_pairs(point_pairs)
+    points = plane_pairs(points) # needs to be changes for multiple elements in one layer
     return points
   
 def show_points(points):
@@ -261,7 +264,6 @@ def main():
     obj = mesh.Mesh.from_file(stl_file)
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
-    print("the points{}".format(points))
     show_points(points)
 
 
