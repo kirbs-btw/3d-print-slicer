@@ -5,7 +5,17 @@ import pyvista as pv
 class line:
     def __init__(self, v1, v2):
         self.supportV, self.directionV, self.lower_bound, self.upper_bound = self.calcV(v1, v2)
-        
+        self.pointA = v1
+        self.pointB = v2
+
+    def print(self):
+        #print("sV: \n{}".format(self.supportV))
+        print("dV: \n{}".format(self.directionV))
+        print("lb: \n{}".format(self.lower_bound))
+        print("ub: \n{}".format(self.upper_bound))
+        print("pA: \n{}".format(self.pointA))
+        print("pB \n{}".format(self.pointB))
+ 
 
     def calcV(self, v1, v2):
         """
@@ -41,6 +51,7 @@ class line:
         
         """
         if self.directionV[2] == 0:
+            print("went from because no depth")
             return None
 
         v = (h - self.supportV[2]) / self.directionV[2] 
@@ -52,6 +63,7 @@ class line:
 
         # check if point is in between the original points 
         if not x3 > self.lower_bound or not x3 < self.upper_bound:
+            print("went wrong because not in bound")
             return None
         
         x1 = self.supportV[0] + self.directionV[0] * v
@@ -111,8 +123,10 @@ def nrml_points(points, offset):
 
 def create_lines(triangles):
     triangle_lines = []
-
+    f = 0
     for triangle in triangles:
+        
+        print(triangle)
         face_lines = []
         lineOne = line(triangle[0], triangle[1])
         lineTwo = line(triangle[0], triangle[2])
@@ -121,10 +135,11 @@ def create_lines(triangles):
         face_lines.append(lineTwo)
         face_lines.append(lineThree)
         triangle_lines.append(face_lines)
-
+    
     return triangle_lines
 
 def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
+    
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model
@@ -145,12 +160,19 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
             tris_points = []
             for line in tris:
                 point = line.calcVfromH(slice_hight)
+                # has something to do with lower_bound and upper_bound calc
+                line.print()
                 if point != None:
-                    layer_points.append(tris_points)
+                    tris_points.append(point)
+                    print(point)
+                
+                print()
             if tris_points != []:
                 layer_points.append(tris_points)
-        points.append(layer_points)
         
+        if layer_points != []:
+            points.append(layer_points)
+
     return points
 
 def points_are_equal(point_a, point_b):
@@ -175,7 +197,6 @@ def points_are_equal(point_a, point_b):
 
 def point_is_equal_nrml(pair_a, pair_b):
     return points_are_equal(pair_a[0], pair_b[0])
-
 
 def point_is_equal_swap(pair_a, pair_b):    
     return points_are_equal(pair_a[0], pair_b[-1])
@@ -239,15 +260,15 @@ def sort_pairs(point_pairs):
     return points
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
+    layer_hight = 10
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
     point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
-    
-    points = sort_pairs(point_pairs)
-    points = plane_pairs(points) # needs to be changes for multiple elements in one layer
+    # point_pairs = sort_pairs(point_pairs)
+    points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
     return points
   
 def show_points(points):
