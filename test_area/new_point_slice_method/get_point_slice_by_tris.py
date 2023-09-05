@@ -51,7 +51,6 @@ class line:
         
         """
         if self.directionV[2] == 0:
-            print("went from because no depth")
             return None
 
         v = (h - self.supportV[2]) / self.directionV[2] 
@@ -63,7 +62,6 @@ class line:
 
         # check if point is in between the original points 
         if not x3 > self.lower_bound or not x3 < self.upper_bound:
-            print("went wrong because not in bound")
             return None
         
         x1 = self.supportV[0] + self.directionV[0] * v
@@ -123,10 +121,8 @@ def nrml_points(points, offset):
 
 def create_lines(triangles):
     triangle_lines = []
-    f = 0
+
     for triangle in triangles:
-        
-        print(triangle)
         face_lines = []
         lineOne = line(triangle[0], triangle[1])
         lineTwo = line(triangle[0], triangle[2])
@@ -156,17 +152,14 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
         slice_hight = layer_count / (1 / layer_hight) # layerhight factor
         layer_points = []
 
+
         for tris in triangle_lines:
             tris_points = []
             for line in tris:
                 point = line.calcVfromH(slice_hight)
-                # has something to do with lower_bound and upper_bound calc
-                line.print()
                 if point != None:
                     tris_points.append(point)
-                    print(point)
-                
-                print()
+            
             if tris_points != []:
                 layer_points.append(tris_points)
         
@@ -204,8 +197,8 @@ def point_is_equal_swap(pair_a, pair_b):
 def plane_pairs(pair_arr):
     new_arr = []
     for layer in pair_arr:
+        new_layer = []
         for pair in layer: 
-            new_layer = [] 
             for point in pair:
                 new_layer.append(point)
         new_arr.append(new_layer)
@@ -260,17 +253,16 @@ def sort_pairs(point_pairs):
     return points
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
-    layer_hight = 10
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
     point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
-    # point_pairs = sort_pairs(point_pairs)
+    point_pairs = sort_pairs(point_pairs)
     points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
     return points
-  
+
 def show_points(points):
     point_list = []
     for i in points:
@@ -281,7 +273,8 @@ def show_points(points):
     point_cloud.plot(eye_dome_lighting=True)
 
 def main():
-    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     obj = mesh.Mesh.from_file(stl_file)
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
