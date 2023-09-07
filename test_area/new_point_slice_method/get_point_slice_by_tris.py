@@ -174,9 +174,9 @@ def points_are_equal(point_a, point_b):
     function exists to match up lines in sort_pairs()
     """
 
-    if point_a[0] == point_b[0]:
+    if point_a[0] != point_b[0]:
         return False
-    if point_a[1] == point_b[1]:
+    if point_a[1] != point_b[1]:
         return False
     
     """
@@ -189,10 +189,10 @@ def points_are_equal(point_a, point_b):
     return True
 
 def point_is_equal_nrml(pair_a, pair_b):
-    return points_are_equal(pair_a[0], pair_b[0])
+    return points_are_equal(pair_a[-1], pair_b[0])
 
 def point_is_equal_swap(pair_a, pair_b):    
-    return points_are_equal(pair_a[0], pair_b[-1])
+    return points_are_equal(pair_a[-1], pair_b[-1])
 
 def plane_pairs(pair_arr):
     new_arr = []
@@ -204,53 +204,38 @@ def plane_pairs(pair_arr):
         new_arr.append(new_layer)
     return new_arr 
 
-def sort_pairs(point_pairs):
-    """
-    compart/match logic
-
-    exp.:
-        [24, 12]
-        [3, 24]
-        [3, 12]
-
-        -> 24, 12, 12, 3, 3, 24
+def find_fitting_pair(checking_pair, pair_list):
+    for index, pair in enumerate(pair_list):
+        if point_is_equal_nrml(checking_pair, pair):
+            return [pair, index]
+        if point_is_equal_swap(checking_pair, pair):
+            new_pair = [pair[1], pair[0]]
+            return [new_pair, index]
     
-    if there is only one loop and not multiple elements
-    for layer in point_pairs:
-        new_layer_points = [layer[0]]
-        while layer != []:
-            checking_element = new_layer_points[-1] 
-            for every pair (exept used ones) in layer:
-                check for equal part in pair
-                    new_layer_points.append(pair)
 
-        reformating new_layer_points to normal plane list of points 
-
-    """
-
-    points = []
-    for layer in point_pairs:
-       
-        if layer == []:
+def sort_layer_pairs(layer_pairs):
+    run_time = len(layer_pairs)
+    layer_pairs_save = layer_pairs
+    layer_sorted = [layer_pairs_save[0]]
+    layer_pairs_save.remove(layer_sorted[0])
+    for _ in range(run_time):
+        fitting = find_fitting_pair(layer_sorted[-1], layer_pairs_save)
+        if fitting == None:
             continue
-        new_layer_points = [layer[0]]
-        layer.remove(layer[0])
-        for _ in range(len(layer)):
-            checking_element = new_layer_points[-1]
-            
-            for pair in layer:
-                if pair == []:
-                    continue
-                
-                if point_is_equal_nrml(pair, checking_element):
-                    new_layer_points.append(pair)
-                    layer.remove(pair)
-                elif point_is_equal_swap(pair, checking_element):
-                    new_pair = [pair[1], pair[0]]
-                    new_layer_points.append(new_pair)
-                    layer.remove(pair)
-        points.append(new_layer_points)
-    return points
+        fitting_pair = fitting[0]
+        index_of_fitting_pair = fitting[1]
+        layer_sorted.append(fitting_pair)
+        layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
+
+    return layer_sorted
+
+def sort_point_pairs(point_pairs):
+    point_pairs_sorted = []
+    
+    for layer in point_pairs:
+        point_pairs_sorted.append(sort_layer_pairs(layer))
+    
+    return point_pairs_sorted
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
@@ -259,7 +244,7 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
     point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
-    point_pairs = sort_pairs(point_pairs)
+    point_pairs = sort_point_pairs(point_pairs)
     points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
     return points
 
@@ -273,8 +258,8 @@ def show_points(points):
     point_cloud.plot(eye_dome_lighting=True)
 
 def main():
-    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     obj = mesh.Mesh.from_file(stl_file)
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
