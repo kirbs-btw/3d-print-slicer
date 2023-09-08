@@ -194,15 +194,7 @@ def point_is_equal_nrml(pair_a, pair_b):
 def point_is_equal_swap(pair_a, pair_b):    
     return points_are_equal(pair_a[-1], pair_b[-1])
 
-def plane_pairs(pair_arr):
-    new_arr = []
-    for layer in pair_arr:
-        new_layer = []
-        for pair in layer: 
-            for point in pair:
-                new_layer.append(point)
-        new_arr.append(new_layer)
-    return new_arr 
+
 
 def find_fitting_pair(checking_pair, pair_list):
     for index, pair in enumerate(pair_list):
@@ -211,12 +203,32 @@ def find_fitting_pair(checking_pair, pair_list):
         if point_is_equal_swap(checking_pair, pair):
             new_pair = [pair[1], pair[0]]
             return [new_pair, index]
-    
 
 def sort_layer_pairs(layer_pairs):
+    layer_sorted = []
+
+    layer_pairs_save = layer_pairs # saves unsorted state of layer_pairs to be changes later
+    while layer_pairs_save != []: 
+        run_time = len(layer_pairs_save)
+        sorted_element = [layer_pairs_save[0]] # sorted pairs
+        layer_pairs_save.remove(sorted_element[0])
+        for _ in range(run_time):
+            fitting = find_fitting_pair(sorted_element[-1], layer_pairs_save)
+            if fitting == None:
+                continue
+            fitting_pair = fitting[0]
+            index_of_fitting_pair = fitting[1]
+            sorted_element.append(fitting_pair)
+            layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
+        layer_sorted.append(sorted_element)
+
+    return layer_sorted
+
+"""
+def sort_layer_pairs(layer_pairs):
     run_time = len(layer_pairs)
-    layer_pairs_save = layer_pairs
-    layer_sorted = [layer_pairs_save[0]]
+    layer_pairs_save = layer_pairs # saves unsorted state of layer_pairs to be changes later
+    layer_sorted = [layer_pairs_save[0]] # sorted pairs
     layer_pairs_save.remove(layer_sorted[0])
     for _ in range(run_time):
         fitting = find_fitting_pair(layer_sorted[-1], layer_pairs_save)
@@ -228,6 +240,7 @@ def sort_layer_pairs(layer_pairs):
         layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
 
     return layer_sorted
+"""
 
 def sort_point_pairs(point_pairs):
     point_pairs_sorted = []
@@ -236,6 +249,20 @@ def sort_point_pairs(point_pairs):
         point_pairs_sorted.append(sort_layer_pairs(layer))
     
     return point_pairs_sorted
+
+def plane_pairs(pair_arr):
+    new_arr = []
+    for layer in pair_arr:
+        new_layer = []
+        for element in layer:
+            new_element = []
+            for pair in element:
+                for point in pair:
+                    new_element.append(point)
+            new_layer.append(new_element)
+        new_arr.append(new_layer)
+    return new_arr
+    
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
