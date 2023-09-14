@@ -11,7 +11,13 @@ when there are multiple loops there are multiple elements in one layer --> zhop
 # Files
 Still work in progress sorted work will be comming soon 
 
+# WIP
+wall thickness could be done by triangular calc 
+
+
+
 # To do
-- connection of points in path
-- distinction of multiple obj
 - infill pattern
+- wall thickness
+- zhop
+- finding good extrusion 
