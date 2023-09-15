@@ -285,8 +285,8 @@ def show_points(points):
     point_cloud.plot(eye_dome_lighting=True)
 
 def main():
-    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-    # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+    stl_file = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    # stl_file = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     obj = mesh.Mesh.from_file(stl_file)
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)

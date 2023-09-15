@@ -74,10 +74,10 @@ def create_moves(points, fill):
 
 def create_gcode_array(moves):
 
-    with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/gcode_parts/top_gcode.txt') as f:
+    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/gcode_parts/top_gcode.txt') as f:
         top = np.array(f.readlines())
 
-    with open('H:/Projekte/Projekte/Project 137/3d-print-slicer/gcode_parts//end_gcode.txt') as f:
+    with open('F:/Projekte/Projekte/Project 137/3d-print-slicer/gcode_parts//end_gcode.txt') as f:
         end = np.array(f.readlines())
     
     gcode_array = []

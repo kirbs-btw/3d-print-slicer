@@ -10,15 +10,15 @@ def save_gcode(gcode, save_path="", file_name="unnamend"):
 
 def main():
 
-    file_path = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+    file_path = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
     layer_hight = 0.2 # in mm
     x_dim = 50
     y_dim = 50
     z_dim = 50
     plate_shift = 30
 
-    file_name = 'tree'
-    save_path = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/save/'
+    file_name = 'new_tree'
+    save_path = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/save/'
     
     stl_obj = mesh.Mesh.from_file(file_path)
     points = sp.get_points_from_stl(stl_obj, layer_hight=layer_hight, x_dim=x_dim, y_dim=y_dim, z_dim=z_dim, offset=plate_shift)
