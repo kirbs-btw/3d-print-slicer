@@ -1,16 +1,21 @@
-import numpy as np
+import numpy as np 
 from stl import mesh
-from mpl_toolkits import mplot3d
-from matplotlib import pyplot
-
-# point cloud graphing
 import pyvista as pv
-
 
 class line:
     def __init__(self, v1, v2):
         self.supportV, self.directionV, self.lower_bound, self.upper_bound = self.calcV(v1, v2)
-        
+        self.pointA = v1
+        self.pointB = v2
+
+    def print(self):
+        #print("sV: \n{}".format(self.supportV))
+        print("dV: \n{}".format(self.directionV))
+        print("lb: \n{}".format(self.lower_bound))
+        print("ub: \n{}".format(self.upper_bound))
+        print("pA: \n{}".format(self.pointA))
+        print("pB \n{}".format(self.pointB))
+ 
 
     def calcV(self, v1, v2):
         """
@@ -64,104 +69,21 @@ class line:
         
         return [x1, x2, x3]
 
-
-def create_line(mesh):
-    # array to hold all conections between triangles
-    lines = []
-
-    # creates the conecting lines between the triangles of the mesh
-    for triangle in mesh:
-        lineOne = line(triangle[0], triangle[1])
-        lineTwo = line(triangle[0], triangle[2])
-        lineThree = line(triangle[1], triangle[2])
-        lines.append(lineOne)
-        lines.append(lineTwo)
-        lines.append(lineThree)
-
-    return lines
-
-def lines_are_the_same(lineA, lineB):
-    if lineA.supportV == lineB.supportV and lineA.directionV == lineB.directionV:
-        return True
-    # further checks 
-          
-    return False
+def add_dim(stl_obj, x_dim, y_dim, z_dim):
+    x_dim /= 2
+    y_dim /= 2
+    z_dim /= 2
 
 
+    new_triangles = []
 
-def del_z_plane_lines(lines):
-    new_lines = lines
+    for triangle in stl_obj.vectors:
+        v1 = [triangle[0][0]*x_dim, triangle[0][1]*y_dim, triangle[0][2]*z_dim]
+        v2 = [triangle[1][0]*x_dim, triangle[1][1]*y_dim, triangle[1][2]*z_dim]
+        v3 = [triangle[2][0]*x_dim, triangle[2][1]*y_dim, triangle[2][2]*z_dim]
+        new_triangles.append([v1, v2, v3])
 
-    for line in new_lines:
-        if line.upper_bound == line.lower_bound:
-            new_lines.remove(line)
-
-    return new_lines
-
-
-def del_duplicate(lines):
-    """
-    deletes the duplicate lines
-    stl saves points duplicate
-    """
-
-    new_lines = []
-
-    for line in lines: 
-        switch = False
-        for saved_line in new_lines:
-            if lines_are_the_same(saved_line, line):
-                switch = True
-                
-        if not switch:
-            new_lines.append(line)
-
-    return new_lines
-
-def del_redundant(lines):
-    lines = del_z_plane_lines(lines)
-    # lines = del_duplicate(lines)
-    return lines
-
-def slice_z(lines, layer_hight = 0.1, layer_count = 0):
-    """
-    slices the obj by inserting the hight inside the 
-    line a param and calulating the points at this hight in the model 
-
-    optimization
-    - no real problem by now, algorithm is fast enough big models load like one second
-
-    - could be optimized by excluding lines that are in one z plane and have no real hight
-    - excluding lines with smaler upperbound than the hight we are checking 
-    - deleting dublicate lines in the list --> stl files are saving sometime the same conection twice because of 
-    overlapping edges 
-    
-    """
-    points = []
-    
-
-    for layer_count in range(int(round(layer_count))):
-        slice_hight = layer_count / (1 / layer_hight) # layerhight factor
-        layer_points = []
-
-        for line in lines:
-            point = line.calcVfromH(slice_hight)
-            if point != None: 
-                layer_points.append(point)
-        if layer_points != []:
-            points.append(layer_points)
-
-    return points
-
-
-def show_points(points):
-    point_list = []
-    for i in points:
-        for j in i:
-            point_list.append(j)
-
-    point_cloud = pv.PolyData(point_list)
-    point_cloud.plot(eye_dome_lighting=True)
+    return new_triangles
 
 def find_lower_value(points):
     x = points[0][0][0]
@@ -180,22 +102,6 @@ def find_lower_value(points):
 
     return x, y, z
 
-def add_dim(stl_obj, x_dim, y_dim, z_dim):
-    x_dim /= 2
-    y_dim /= 2
-    z_dim /= 2
-
-
-    new_triangles = []
-
-    for triangle in stl_obj.vectors:
-        v1 = [triangle[0][0]*x_dim, triangle[0][1]*y_dim, triangle[0][2]*z_dim]
-        v2 = [triangle[1][0]*x_dim, triangle[1][1]*y_dim, triangle[1][2]*z_dim]
-        v3 = [triangle[2][0]*x_dim, triangle[2][1]*y_dim, triangle[2][2]*z_dim]
-        new_triangles.append([v1, v2, v3])
-
-    return new_triangles
-
 def adding_lower_bound(points, x, y, z, offset=100):
     new_triangles = []
 
@@ -207,43 +113,185 @@ def adding_lower_bound(points, x, y, z, offset=100):
 
     return new_triangles
 
-
 def nrml_points(points, offset):
     x, y, z = find_lower_value(points)
     points = adding_lower_bound(points, x, y, z, offset)
 
     return points
 
+def create_lines(triangles):
+    triangle_lines = []
+
+    for triangle in triangles:
+        face_lines = []
+        lineOne = line(triangle[0], triangle[1])
+        lineTwo = line(triangle[0], triangle[2])
+        lineThree = line(triangle[1], triangle[2])
+        face_lines.append(lineOne)
+        face_lines.append(lineTwo)
+        face_lines.append(lineThree)
+        triangle_lines.append(face_lines)
+    
+    return triangle_lines
+
+def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
+    
+    """
+    slices the obj by inserting the hight inside the 
+    line a param and calulating the points at this hight in the model
+
+    issue:
+        -edge case 
+        if layer hits corner of tris there are 3 points from wich are two the same
+        del the equal point   
+    """
+    points = []
+    
+
+    for layer_count in range(int(round(layer_count))):
+        slice_hight = layer_count / (1 / layer_hight) # layerhight factor
+        layer_points = []
+
+
+        for tris in triangle_lines:
+            tris_points = []
+            for line in tris:
+                point = line.calcVfromH(slice_hight)
+                if point != None:
+                    tris_points.append(point)
+            
+            if tris_points != []:
+                layer_points.append(tris_points)
+        
+        if layer_points != []:
+            points.append(layer_points)
+
+    return points
+
+def points_are_equal(point_a, point_b):
+    """
+    checks is points are equal 
+    function exists to match up lines in sort_pairs()
+    """
+
+    if point_a[0] != point_b[0]:
+        return False
+    if point_a[1] != point_b[1]:
+        return False
+    
+    """
+    not needed because we check only points that are on the same layer
+
+    if point_a[2] == point_b[2]:
+        return False
+    """
+
+    return True
+
+def point_is_equal_nrml(pair_a, pair_b):
+    return points_are_equal(pair_a[-1], pair_b[0])
+
+def point_is_equal_swap(pair_a, pair_b):    
+    return points_are_equal(pair_a[-1], pair_b[-1])
+
+
+
+def find_fitting_pair(checking_pair, pair_list):
+    for index, pair in enumerate(pair_list):
+        if point_is_equal_nrml(checking_pair, pair):
+            return [pair, index]
+        if point_is_equal_swap(checking_pair, pair):
+            new_pair = [pair[1], pair[0]]
+            return [new_pair, index]
+
+def sort_layer_pairs(layer_pairs):
+    layer_sorted = []
+
+    layer_pairs_save = layer_pairs # saves unsorted state of layer_pairs to be changes later
+    while layer_pairs_save != []: 
+        run_time = len(layer_pairs_save)
+        sorted_element = [layer_pairs_save[0]] # sorted pairs
+        layer_pairs_save.remove(sorted_element[0])
+        for _ in range(run_time):
+            fitting = find_fitting_pair(sorted_element[-1], layer_pairs_save)
+            if fitting == None:
+                continue
+            fitting_pair = fitting[0]
+            index_of_fitting_pair = fitting[1]
+            sorted_element.append(fitting_pair)
+            layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
+        layer_sorted.append(sorted_element)
+
+    return layer_sorted
+
+"""
+def sort_layer_pairs(layer_pairs):
+    run_time = len(layer_pairs)
+    layer_pairs_save = layer_pairs # saves unsorted state of layer_pairs to be changes later
+    layer_sorted = [layer_pairs_save[0]] # sorted pairs
+    layer_pairs_save.remove(layer_sorted[0])
+    for _ in range(run_time):
+        fitting = find_fitting_pair(layer_sorted[-1], layer_pairs_save)
+        if fitting == None:
+            continue
+        fitting_pair = fitting[0]
+        index_of_fitting_pair = fitting[1]
+        layer_sorted.append(fitting_pair)
+        layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
+
+    return layer_sorted
+"""
+
+def sort_point_pairs(point_pairs):
+    point_pairs_sorted = []
+    
+    for layer in point_pairs:
+        point_pairs_sorted.append(sort_layer_pairs(layer))
+    
+    return point_pairs_sorted
+
+def plane_pairs(pair_arr):
+    new_arr = []
+    for layer in pair_arr:
+        new_layer = []
+        for element in layer:
+            new_element = []
+            for pair in element:
+                for point in pair:
+                    new_element.append(point)
+            new_layer.append(new_element)
+        new_arr.append(new_layer)
+    return new_arr
+    
+
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
-    lines = create_line(triangles)
-    lines = del_redundant(lines)
-    points = slice_z(lines, layer_hight, layer_count)
-
+    triangle_lines = create_lines(triangles)
+    point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
+    point_pairs = sort_point_pairs(point_pairs)
+    points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
     return points
 
+def show_points(points):
+    point_list = []
+    for i in points:
+        for j in i:
+            point_list.append(j)
+
+    point_cloud = pv.PolyData(point_list)
+    point_cloud.plot(eye_dome_lighting=True)
 
 def main():
-    """
-        stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-        # stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
-        cube = mesh.Mesh.from_file(stl_file)
-        lines = create_line(cube)
-        lines = del_redundant(lines)
-        points = slice_z(lines)
-        print(points)
-        show_points(points)
-    """
+    stl_file = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
+    # stl_file = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/tree.stl'
+    obj = mesh.Mesh.from_file(stl_file)
 
-    stl_file = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
-    cube = mesh.Mesh.from_file(stl_file)
-    points = get_points_from_stl(cube, x_dim=100, y_dim=100, z_dim=100)
-    print("the points{}".format(points))
+    points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
     show_points(points)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
