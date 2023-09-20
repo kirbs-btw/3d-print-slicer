@@ -286,7 +286,32 @@ def plane_pairs(pair_arr):
             new_layer.append(new_element)
         new_arr.append(new_layer)
     return new_arr
+
+
+# Testing around with infill slicing 
+def slice_infill(infill_points):
+
+    # creates line obj from 
+    # points
+    infill_lines = []
+    for layer in infill_points:
+        for line in layer:
+            infill_lines.append(line[0], line[1])
     
+    # slicing lines 
+    # slicing with the x/y value of the wall line to get the point 
+    
+    # no creation of lines for infill 
+    # using the points to slice in the wall lines 
+    # --> new finding pos method in line class
+    # 
+    # only a solution for line that are inside the grid and not for lines that have an angle or are 
+    # curves or honey comb
+    
+
+
+    
+
 
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
     layer_count = z_dim / layer_hight
