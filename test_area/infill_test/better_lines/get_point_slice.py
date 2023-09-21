@@ -289,15 +289,16 @@ def plane_pairs(pair_arr):
 
 
 # Testing around with infill slicing 
-def slice_infill(infill_points):
-
-    # creates line obj from 
-    # points
-    infill_lines = []
-    for layer in infill_points:
-        for line in layer:
-            infill_lines.append(line[0], line[1])
+def slice_infill(infill_points, point_pairs_sorted, layer_num):
+    # create lines for wall at layer_num 
+    layer_lines = []
+    #structure will be [element[linesof element]] 
     
+    for element in point_pairs_sorted[layer_num]:
+        element_lines = []
+        for pair in element: 
+            element_lines.append(line(pair[0], pair[-1])
+        layer_lines.append(element_lines)
     # slicing lines 
     # slicing with the x/y value of the wall line to get the point 
     
