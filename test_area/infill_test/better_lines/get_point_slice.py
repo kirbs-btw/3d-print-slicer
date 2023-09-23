@@ -64,9 +64,48 @@ class line:
         self.lower_z_bound = lower_z
         self.upper_z_bound = upper_z
 
+    
+
     def calcVfromX(self, x_value):
-        # same calc as with calcVfromH
-        pass
+        if self.directionV[0] == 0:
+            return None
+
+        v = (x_value - self.supportV[0]) / self.directionV[0] 
+
+        """
+        placing v in equation
+        """
+        x1 = self.supportV[0] + self.directionV[0] * v
+
+        # check if point is in between the original points 
+        if not x1 > self.lower_x_bound or not x1 < self.upper_x_bound:
+            return None
+        
+        x2 = self.supportV[1] + self.directionV[1] * v
+        x3 = self.supportV[2] + self.directionV[2] * v
+        
+        return [x1, x2, x3]
+
+    def calcVfromY(self, y_value):
+        if self.directionV[1] == 0:
+            return None
+
+        v = (y_value - self.supportV[1]) / self.directionV[1] 
+
+        """
+        placing v in equation
+        """
+        x2 = self.supportV[1] + self.directionV[1] * v
+
+        # check if point is in between the original points 
+        if not x2 > self.lower_y_bound or not x2 < self.upper_y_bound:
+            return None
+        
+        x1 = self.supportV[0] + self.directionV[0] * v
+        x3 = self.supportV[2] + self.directionV[2] * v
+        
+        return [x1, x2, x3]
+
     
     def calcVfromH(self, h):
         """
