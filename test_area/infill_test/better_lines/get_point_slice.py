@@ -260,8 +260,6 @@ def point_is_equal_nrml(pair_a, pair_b):
 def point_is_equal_swap(pair_a, pair_b):    
     return points_are_equal(pair_a[-1], pair_b[-1])
 
-
-
 def find_fitting_pair(checking_pair, pair_list):
     for index, pair in enumerate(pair_list):
         if point_is_equal_nrml(checking_pair, pair):
@@ -328,6 +326,46 @@ def plane_pairs(pair_arr):
             new_layer.append(new_element)
         new_arr.append(new_layer)
     return new_arr
+
+def get_layer_lines(layer_points):
+    layer_lines = []
+    for element in layer_points:
+        element_lines = []
+        for pair in element:
+            element_lines.append(line(pair[0], pair[-1]))
+        layer_lines.append(element_lines)
+
+    return layer_lines
+
+def bottom_layer(point_pairs, bottom_layer_count):
+    """
+    bottom_layer_count = num of bottom layers
+
+    """
+    printer_dim_x = 2000
+    printer_dim_y = 2000
+    line_width = 0.2
+
+    line_count_x = printer_dim_x / line_width
+    line_count_y = printer_dim_y / line_width
+    
+
+    for layer_num in range(bottom_layer_count):
+        layer_lines = get_layer_lines(point_pairs[layer_num])
+        layer_line_points = [] 
+        # points get saved her for later implementation 
+        for width in range(line_count_x):
+            points_at_width = [] # count of points per 
+            check_num = width * line_width
+            for element in layer_lines:
+                element_points = []
+                for line in element:
+                    point = line.calcVfromX(check_num)
+                    if point != None:
+                        element_points.append(point)
+                element_points.append(points_at_width)
+            layer_line_points.append(element_points)
+            
 
 
 # Testing around with infill slicing 
