@@ -337,9 +337,8 @@ def get_layer_lines(layer_points):
 
     return layer_lines
 
-def create_fill_layer(line_count, line_width, layer_lines):
+def create_fill_layer_x(line_count, line_width, layer_lines):
     layer_line_points = [] 
-    # points get saved her for later implementation 
     for width in range(line_count):
             points_at_width = [] # count of points per 
             check_num = width * line_width
@@ -347,6 +346,21 @@ def create_fill_layer(line_count, line_width, layer_lines):
                 element_points = []
                 for line in element:
                     point = line.calcVfromX(check_num)
+                    if point != None:
+                        element_points.append(point)
+                element_points.append(points_at_width)
+            layer_line_points.append(element_points)
+    return layer_line_points
+
+def create_fill_layer_y(line_count, line_width, layer_lines):
+    layer_line_points = [] 
+    for width in range(line_count):
+            points_at_width = [] # count of points per 
+            check_num = width * line_width
+            for element in layer_lines:
+                element_points = []
+                for line in element:
+                    point = line.calcVfromY(check_num)
                     if point != None:
                         element_points.append(point)
                 element_points.append(points_at_width)
@@ -367,7 +381,7 @@ def bottom_layer(point_pairs, bottom_layer_count):
     
     for layer_num in range(bottom_layer_count):
         layer_lines = get_layer_lines(point_pairs[layer_num])
-        layer_line_points = create_fill_layer(line_count_x, line_width, layer_lines) 
+        layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines) 
             
 
 
