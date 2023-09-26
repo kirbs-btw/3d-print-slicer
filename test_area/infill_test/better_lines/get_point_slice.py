@@ -381,8 +381,13 @@ def bottom_layer(point_pairs, bottom_layer_count):
     
     for layer_num in range(bottom_layer_count):
         layer_lines = get_layer_lines(point_pairs[layer_num])
-        layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines) 
-            
+        # exporting this function part to a section in the slicing to create bottom / top 
+        # layers while slicing 
+        if (layer_num % 2) == 0:
+            layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines) 
+        else:
+            layer_line_points = create_fill_layer_y(line_count_y, line_width, layer_lines)
+        
 
 
 # Testing around with infill slicing 
