@@ -200,7 +200,7 @@ def create_lines(triangles):
     
     return triangle_lines
 
-def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
+def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3):
     
     """
     slices the obj by inserting the hight inside the 
@@ -212,12 +212,15 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
         del the equal point   
     """
     points = []
+
+    # include bottom and top layers calc to the loop 
+
+
     
 
     for layer_count in range(int(round(layer_count))):
         slice_hight = layer_count / (1 / layer_hight) # layerhight factor
         layer_points = []
-
 
         for tris in triangle_lines:
             tris_points = []
@@ -231,6 +234,17 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
         
         if layer_points != []:
             points.append(layer_points)
+
+        # adding bottom layer 
+
+        if bottom_fill_layers <= 0:
+            continue
+            
+        if (bottom_fill_layers % 2) == 0:
+            layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines)
+        elif (bottom_fill_layer % 2) != 0:
+            layer_line_points = create_fill_layer_y(line_count_y, line_width, layer_lines)
+
 
     return points
 
@@ -387,43 +401,9 @@ def bottom_layer(point_pairs, bottom_layer_count):
             layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines) 
         else:
             layer_line_points = create_fill_layer_y(line_count_y, line_width, layer_lines)
-        
+            
 
-
-# Testing around with infill slicing 
-def slice_infill_layer(infill_points, point_pairs, layer_num):
-
-    layer_lines = []
-    # creating lines for the wall layer 
-    for element in point_pairs[layer_num]:
-        element_lines = []
-        for point_pair in element:
-            element_lines.append(line(point_pair[0], point_pair[-1]))
-        layer_lines.append(element_lines)
-    
-    # for paralell lines
-
-    for width in range(1000):
-        # calc point in line at x or y
-        pass
-
-
-    # slicing lines 
-    # slicing with the x/y value of the wall line to get the point 
-    
-    # no creation of lines for infill 
-    # using the points to slice in the wall lines 
-    # --> new finding pos method in line class
-    # 
-    # only a solution for line that are inside the grid and not for lines that have an angle or are 
-    # curves or honey comb
-    
-
-
-    
-
-
-def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
+def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100, printer_x=2000, printer_y=2000):
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
@@ -432,6 +412,7 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
     point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
     point_pairs = sort_point_pairs(point_pairs)
     points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
+    
     return points
 
 def show_points(points):
