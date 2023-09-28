@@ -200,8 +200,8 @@ def create_lines(triangles):
     
     return triangle_lines
 
-def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3):
-    
+def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
+
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model
@@ -211,6 +211,10 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_laye
         if layer hits corner of tris there are 3 points from wich are two the same
         del the equal point   
     """
+    line_count_x = printer_width_x / layer_hight
+    line_count_y = printer_width_y / layer_hight
+
+
     points = []
 
     # include bottom and top layers calc to the loop 
@@ -239,11 +243,12 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_laye
 
         if bottom_fill_layers <= 0:
             continue
-            
+        
+        # layer lines = point_pairs , include pointpairs in path
         if (bottom_fill_layers % 2) == 0:
-            layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines)
-        elif (bottom_fill_layer % 2) != 0:
-            layer_line_points = create_fill_layer_y(line_count_y, line_width, layer_lines)
+            layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
+        elif (bottom_fill_layers % 2) != 0:
+            layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
 
 
     return points
