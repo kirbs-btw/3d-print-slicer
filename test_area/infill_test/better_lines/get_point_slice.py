@@ -200,7 +200,9 @@ def create_lines(triangles):
     
     return triangle_lines
 
-def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
+def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
+
+    triangle_lines = plane_pairs(point_pairs)
 
     """
     slices the obj by inserting the hight inside the 
@@ -246,10 +248,9 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0, bottom_fill_laye
         
         # layer lines = point_pairs , include pointpairs in path
         if (bottom_fill_layers % 2) == 0:
-            layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
+            layer_line_points = create_fill_layer_x(line_count_x, layer_hight, point_pairs[layer_count])
         elif (bottom_fill_layers % 2) != 0:
-            layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
-
+            layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
 
     return points
 
