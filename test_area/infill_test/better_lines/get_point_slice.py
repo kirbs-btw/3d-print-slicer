@@ -200,7 +200,7 @@ def create_lines(triangles):
     
     return triangle_lines
 
-def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
+def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=3, top_fill_layer=3, printer_width_x=2000, printer_width_y=2000):
 
     triangle_lines = plane_pairs(point_pairs)
 
@@ -245,6 +245,7 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=
 
         if bottom_fill_layers <= 0:
             continue
+
         
         # layer lines = point_pairs , include pointpairs in path
         if (bottom_fill_layers % 2) == 0:
@@ -252,6 +253,10 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=
         elif (bottom_fill_layers % 2) != 0:
             layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
 
+        bottom_fill_layer -= 1 
+        
+        if top_fill_layer <= 0:
+            continue 
     return points
 
 def points_are_equal(point_a, point_b):
