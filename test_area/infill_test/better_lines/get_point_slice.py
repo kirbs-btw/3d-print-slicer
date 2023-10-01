@@ -257,6 +257,14 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=
         
         if top_fill_layer <= 0:
             continue 
+        if (top_fill_layer % 2) == 0 and : 
+            layer_line_points = create_fill_layer_x(line_count_x, layer_hight, point_pairs[])
+        elif (top_fill_layer % 2) != 0 and : 
+            layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[])
+
+        top_fill_layer -= 1 
+        
+
     return points
 
 def points_are_equal(point_a, point_b):
