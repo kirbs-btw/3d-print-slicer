@@ -220,13 +220,14 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=
     points = []
 
     # include bottom and top layers calc to the loop 
-
+    layer_number = len(triangle_lines) 
 
     
 
     for layer_count in range(int(round(layer_count))):
         slice_hight = layer_count / (1 / layer_hight) # layerhight factor
         layer_points = []
+        
 
         for tris in triangle_lines:
             tris_points = []
@@ -257,6 +258,10 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_count = 0, bottom_fill_layers=
         
         if top_fill_layer <= 0:
             continue 
+
+        top_layer_valid_count = layer_numer - 1 - layer_count 
+
+        
         if (top_fill_layer % 2) == 0 and : 
             layer_line_points = create_fill_layer_x(line_count_x, layer_hight, point_pairs[])
         elif (top_fill_layer % 2) != 0 and : 
