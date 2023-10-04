@@ -246,7 +246,6 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3,
             points.append(layer_points)
 
         # adding bottom layer 
-        # append layer_line_points to the current layer points in all four clauses 
 
         if bottom_fill_layers > 0:
             if (bottom_fill_layers % 2) == 0:
@@ -254,6 +253,7 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3,
                 
             elif (bottom_fill_layers % 2) != 0:
                 layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
+            layer_points.append(layer_line_points)
             botton_fill_layer -= 1
 
         # adding top layer 
@@ -268,6 +268,7 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3,
 
             elif (top_fill_layers % 2) != 0:
                 layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
+            layer_points.append(layer_line_points)
             top_fill_layer -= 1
 
     return points
@@ -415,11 +416,13 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, off
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
     triangle_lines = create_lines(triangles)
-    point_pairs = slice_z(triangle_lines, layer_hight, layer_count, printer_width_x=printer_x, printer_width_y=printer_y) # slice z returns only []
+    point_pairs = slice_z(triangle_lines, layer_hight, layer_count, printer_width_x=printer_x, printer_width_y=printer_y)
 
     # note for layer
     # is slice_z the right part to add top and bottom fill 
     # because of point pair sorting ?
+    # could get to some problem with wrong path because walls lines in and infill lines are not orderd 
+    # wall lines could to to infill lines... 
 
     point_pairs = sort_point_pairs(point_pairs)
     points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
