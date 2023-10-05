@@ -186,7 +186,10 @@ def nrml_points(points, offset):
     return points
 
 def create_lines(triangles):
-    triangle_lines = []
+    """
+    creates the obj with triangles and line obj
+    """
+    obj_triangle_lines = []
 
     for triangle in triangles:
         face_lines = []
@@ -196,17 +199,14 @@ def create_lines(triangles):
         face_lines.append(lineOne)
         face_lines.append(lineTwo)
         face_lines.append(lineThree)
-        triangle_lines.append(face_lines)
+        obj_triangle_lines.append(face_lines)
     
-    return triangle_lines
+    return obj_triangle_lines
 
-def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3, top_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
+def slice_z(triangle_lines, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3, top_fill_layers=3, printer_width_x=2000, printer_width_y=2000):
     """
     :param layer_num: counts the number of layers 
-
-    
     """
-    triangle_lines = plane_pairs(point_pairs)
 
     """
     slices the obj by inserting the hight inside the 
@@ -217,16 +217,12 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3,
         if layer hits corner of tris there are 3 points from wich are two the same
         del the equal point   
     """
-    line_count_x = printer_width_x / layer_hight
-    line_count_y = printer_width_y / layer_hight
-
+    line_count_x = round(printer_width_x / layer_hight)
+    line_count_y = round(printer_width_y / layer_hight)
 
     points = []
 
     # include bottom and top layers calc to the loop 
-
-
-    
 
     for layer_count in range(int(round(layer_num))):
         slice_hight = layer_count / (1 / layer_hight) # layerhight factor
@@ -247,29 +243,37 @@ def slice_z(point_pairs, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=3,
 
         # adding bottom layer 
 
+        layer_lines = get_layer_lines(layer_points)
+
         if bottom_fill_layers > 0:
             if (bottom_fill_layers % 2) == 0:
-                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, point_pairs[layer_count])
+                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
                 
             elif (bottom_fill_layers % 2) != 0:
-                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
-            layer_points.append(layer_line_points)
-            botton_fill_layer -= 1
+                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
+            
+            # appending line points
+            for element in layer_line_points:
+                layer_points.append(element)
+
+            bottom_fill_layers -= 1
 
         # adding top layer 
         
-        # layer_num, layer_count
-        # num of layers left 
         invers_layer_count = layer_num - 1 - layer_count
 
         if top_fill_layers > 0 and top_fill_layers == invers_layer_count:
             if (top_fill_layers % 2) == 0:
-                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, point_pairs[layer_count])
+                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
 
             elif (top_fill_layers % 2) != 0:
-                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, point_pairs[layer_count])
-            layer_points.append(layer_line_points)
-            top_fill_layer -= 1
+                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
+            
+            # appending line points
+            for element in layer_line_points:
+                layer_points.append(element)
+            
+            top_fill_layers -= 1
 
     return points
 
@@ -327,7 +331,6 @@ def sort_layer_pairs(layer_pairs):
 
     return layer_sorted
 
-
 def sort_point_pairs(point_pairs):
     point_pairs_sorted = []
     
@@ -360,63 +363,36 @@ def get_layer_lines(layer_points):
     return layer_lines
 
 def create_fill_layer_x(line_count, line_width, layer_lines):
-    layer_line_points = [] 
+    layer = []
     for width in range(line_count):
-            points_at_width = [] # count of points per 
-            check_num = width * line_width
-            for element in layer_lines:
-                element_points = []
-                for line in element:
-                    point = line.calcVfromX(check_num)
-                    if point != None:
-                        element_points.append(point)
-                element_points.append(points_at_width)
-            layer_line_points.append(element_points)
-    return layer_line_points
+        line_element = [] # line at width "element"
+        check_num = width * line_width
+        for line in layer_lines:
+            point = line.calcVfromX(check_num)
+            if point != None:
+                line_element.append(point)
+        layer.append(line_element)
+    return layer
 
 def create_fill_layer_y(line_count, line_width, layer_lines):
-    layer_line_points = [] 
+    layer = []
     for width in range(line_count):
-            points_at_width = [] # count of points per 
-            check_num = width * line_width
-            for element in layer_lines:
-                element_points = []
-                for line in element:
-                    point = line.calcVfromY(check_num)
-                    if point != None:
-                        element_points.append(point)
-                element_points.append(points_at_width)
-            layer_line_points.append(element_points)
-    return layer_line_points
+        line_element = [] # line at width "element"
+        check_num = width * line_width
+        for line in layer_lines:
+            point = line.calcVfromY(check_num)
+            if point != None:
+                line_element.append(point)
+        layer.append(line_element)
+    return layer
 
-def bottom_layer(point_pairs, bottom_layer_count):
-    """
-    bottom_layer_count = num of bottom layers
-
-    """
-    printer_dim_x = 2000
-    printer_dim_y = 2000
-    line_width = 0.2
-
-    line_count_x = printer_dim_x / line_width
-    line_count_y = printer_dim_y / line_width
-    
-    for layer_num in range(bottom_layer_count):
-        layer_lines = get_layer_lines(point_pairs[layer_num])
-        # exporting this function part to a section in the slicing to create bottom / top 
-        # layers while slicing 
-        if (layer_num % 2) == 0:
-            layer_line_points = create_fill_layer_x(line_count_x, line_width, layer_lines) 
-        else:
-            layer_line_points = create_fill_layer_y(line_count_y, line_width, layer_lines)
-            
 def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100, printer_x=2000, printer_y=2000):
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
-    triangle_lines = create_lines(triangles)
-    point_pairs = slice_z(triangle_lines, layer_hight, layer_count, printer_width_x=printer_x, printer_width_y=printer_y)
+    obj_triangle_lines = create_lines(triangles)
+    point_pairs = slice_z(obj_triangle_lines, layer_hight, layer_count, printer_width_x=printer_x, printer_width_y=printer_y)
 
     # note for layer
     # is slice_z the right part to add top and bottom fill 
@@ -445,7 +421,6 @@ def main():
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
     show_points(points)
-
 
 if __name__ == '__main__':
     main()
