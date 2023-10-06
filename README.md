@@ -15,13 +15,9 @@ Still work in progress sorted work will be comming soon
 
 # WIP
 wall thickness could be done by triangular calc 
-fill top and bottom layer 
-
-
 
 # To do
 - infill pattern
 - wall thickness
 - zhop
 - finding good extrusion
-- fill top and bottom layer
