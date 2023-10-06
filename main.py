@@ -9,16 +9,20 @@ def save_gcode(gcode, save_path="", file_name="unnamend"):
         file.write('\n{}'.format(line))
 
 def main():
-
-    file_path = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/ninecube.stl'
+    """
+    the method of filling flore and bottom are way to inefficient
+    lowerd the numbers in flore and bottom count 
+    im confused with the changed numberse but the distances are still ok idk how it works 
+    """
+    file_path = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/demo_stl_files/cube.stl'
     layer_hight = 0.2 # in mm
     x_dim = 50
     y_dim = 50
     z_dim = 50
     plate_shift = 30
 
-    file_name = 'new_ninecube'
-    save_path = 'F:/Projekte/Projekte/Project 137/3d-print-slicer/save/'
+    file_name = 'test_cube_with_bottomandtop'
+    save_path = 'H:/Projekte/Projekte/Project 137/3d-print-slicer/save/'
     
     stl_obj = mesh.Mesh.from_file(file_path)
     points = sp.get_points_from_stl(stl_obj, layer_hight=layer_hight, x_dim=x_dim, y_dim=y_dim, z_dim=z_dim, offset=plate_shift)
