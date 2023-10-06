@@ -4,15 +4,19 @@ import pyvista as pv
 
 class line:
     def __init__(self, v1, v2):
-        self.supportV, self.directionV, self.lower_bound, self.upper_bound = self.calcV(v1, v2)
+        self.supportV = [0, 0, 0]
+        self.directionV = [0, 0, 0]
+        self.lower_z_bound = 0
+        self.upper_z_bound = 0
         self.pointA = v1
         self.pointB = v2
-
+        self.calcV(v1, v2)
+        
     def print(self):
-        #print("sV: \n{}".format(self.supportV))
+        print("sV: \n{}".format(self.supportV))
         print("dV: \n{}".format(self.directionV))
-        print("lb: \n{}".format(self.lower_bound))
-        print("ub: \n{}".format(self.upper_bound))
+        print("lb: \n{}".format(self.lower_z_bound))
+        print("ub: \n{}".format(self.upper_z_bound))
         print("pA: \n{}".format(self.pointA))
         print("pB \n{}".format(self.pointB))
  
@@ -24,13 +28,26 @@ class line:
 
         also determins the upper and lower bound of the 
         line to see if pointis is bewtween those
-        
         """
-        lower = v1[2]
-        upper = v2[2]
 
-        if lower > upper: 
-            lower, upper = upper, lower
+        # print("\n\n\nv1 = {}\n\n\n".format(v1))
+        lower_x = v1[0]
+        upper_x = v2[0]
+
+        if lower_x > upper_x: 
+            lower_x, upper_x = upper_x, lower_x
+
+        lower_y = v1[1]
+        upper_y = v2[1]
+
+        if lower_y > upper_y: 
+            lower_y, upper_y = upper_y, lower_y
+
+        lower_z = v1[2]
+        upper_z = v2[2]
+
+        if lower_z > upper_z: 
+            lower_z, upper_z = upper_z, lower_z
             v1, v2 = v2, v1
 
         x = v2[0] - v1[0]
@@ -39,7 +56,57 @@ class line:
 
         dirV = [x, y, z]
         supportV = v1
-        return supportV, dirV, lower, upper
+        self.supportV = supportV
+        self.directionV = dirV
+        self.lower_x_bound = lower_x
+        self.upper_x_bound = upper_x
+        self.lower_y_bound = lower_y
+        self.upper_y_bound = upper_y
+        self.lower_z_bound = lower_z
+        self.upper_z_bound = upper_z
+
+    
+
+    def calcVfromX(self, x_value):
+        if self.directionV[0] == 0:
+            return None
+
+        v = (x_value - self.supportV[0]) / self.directionV[0] 
+
+        """
+        placing v in equation
+        """
+        x1 = self.supportV[0] + self.directionV[0] * v
+
+        # check if point is in between the original points 
+        if not x1 > self.lower_x_bound or not x1 < self.upper_x_bound:
+            return None
+        
+        x2 = self.supportV[1] + self.directionV[1] * v
+        x3 = self.supportV[2] + self.directionV[2] * v
+        
+        return [x1, x2, x3]
+
+    def calcVfromY(self, y_value):
+        if self.directionV[1] == 0:
+            return None
+
+        v = (y_value - self.supportV[1]) / self.directionV[1] 
+
+        """
+        placing v in equation
+        """
+        x2 = self.supportV[1] + self.directionV[1] * v
+
+        # check if point is in between the original points 
+        if not x2 > self.lower_y_bound or not x2 < self.upper_y_bound:
+            return None
+        
+        x1 = self.supportV[0] + self.directionV[0] * v
+        x3 = self.supportV[2] + self.directionV[2] * v
+        
+        return [x1, x2, x3]
+
     
     def calcVfromH(self, h):
         """
@@ -61,7 +128,7 @@ class line:
         x3 = self.supportV[2] + self.directionV[2] * v
 
         # check if point is in between the original points 
-        if not x3 > self.lower_bound or not x3 < self.upper_bound:
+        if not x3 > self.lower_z_bound or not x3 < self.upper_z_bound:
             return None
         
         x1 = self.supportV[0] + self.directionV[0] * v
@@ -120,7 +187,10 @@ def nrml_points(points, offset):
     return points
 
 def create_lines(triangles):
-    triangle_lines = []
+    """
+    creates the obj with triangles and line obj
+    """
+    obj_triangle_lines = []
 
     for triangle in triangles:
         face_lines = []
@@ -130,12 +200,15 @@ def create_lines(triangles):
         face_lines.append(lineOne)
         face_lines.append(lineTwo)
         face_lines.append(lineThree)
-        triangle_lines.append(face_lines)
+        obj_triangle_lines.append(face_lines)
     
-    return triangle_lines
+    return obj_triangle_lines
 
-def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
-    
+def slice_z(triangle_lines, layer_hight = 0.1, layer_num = 0, bottom_fill_layers=2, top_fill_layers=2, printer_width_x=2000, printer_width_y=2000):
+    """
+    :param layer_num: counts the number of layers 
+    """
+
     """
     slices the obj by inserting the hight inside the 
     line a param and calulating the points at this hight in the model
@@ -145,13 +218,18 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
         if layer hits corner of tris there are 3 points from wich are two the same
         del the equal point   
     """
-    points = []
-    
+    # line_count_x = round(printer_width_x / layer_hight)
+    # line_count_y = round(printer_width_y / layer_hight)
+    line_count_x = round(printer_width_x / 5)
+    line_count_y = round(printer_width_y / 5)
 
-    for layer_count in range(int(round(layer_count))):
+    points = []
+
+    # include bottom and top layers calc to the loop 
+
+    for layer_count in range(int(round(layer_num))):
         slice_hight = layer_count / (1 / layer_hight) # layerhight factor
         layer_points = []
-
 
         for tris in triangle_lines:
             tris_points = []
@@ -163,8 +241,44 @@ def slice_z(triangle_lines, layer_hight = 0.1, layer_count = 0):
             if tris_points != []:
                 layer_points.append(tris_points)
         
-        if layer_points != []:
-            points.append(layer_points)
+        if layer_points == []:
+            continue
+        
+        points.append(layer_points)
+
+        # adding bottom layer 
+        
+        layer_lines = get_layer_lines(layer_points)
+
+        if bottom_fill_layers > 0:
+            if (bottom_fill_layers % 2) == 0:
+                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
+                
+            elif (bottom_fill_layers % 2) != 0:
+                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
+            
+            # appending line points
+            for element in layer_line_points:
+                layer_points.append(element)
+
+            bottom_fill_layers -= 1
+
+        # adding top layer 
+        
+        invers_layer_count = layer_num - 1 - layer_count
+
+        if top_fill_layers > 0 and top_fill_layers == invers_layer_count:
+            if (top_fill_layers % 2) == 0:
+                layer_line_points = create_fill_layer_x(line_count_x, layer_hight, layer_lines)
+
+            elif (top_fill_layers % 2) != 0:
+                layer_line_points = create_fill_layer_y(line_count_y, layer_hight, layer_lines)
+            
+            # appending line points
+            for element in layer_line_points:
+                layer_points.append(element)
+            
+            top_fill_layers -= 1
 
     return points
 
@@ -194,10 +308,10 @@ def point_is_equal_nrml(pair_a, pair_b):
 def point_is_equal_swap(pair_a, pair_b):    
     return points_are_equal(pair_a[-1], pair_b[-1])
 
-
-
 def find_fitting_pair(checking_pair, pair_list):
     for index, pair in enumerate(pair_list):
+        if pair == [] or checking_pair == []:
+            continue
         if point_is_equal_nrml(checking_pair, pair):
             return [pair, index]
         if point_is_equal_swap(checking_pair, pair):
@@ -224,24 +338,6 @@ def sort_layer_pairs(layer_pairs):
 
     return layer_sorted
 
-"""
-def sort_layer_pairs(layer_pairs):
-    run_time = len(layer_pairs)
-    layer_pairs_save = layer_pairs # saves unsorted state of layer_pairs to be changes later
-    layer_sorted = [layer_pairs_save[0]] # sorted pairs
-    layer_pairs_save.remove(layer_sorted[0])
-    for _ in range(run_time):
-        fitting = find_fitting_pair(layer_sorted[-1], layer_pairs_save)
-        if fitting == None:
-            continue
-        fitting_pair = fitting[0]
-        index_of_fitting_pair = fitting[1]
-        layer_sorted.append(fitting_pair)
-        layer_pairs_save.remove(layer_pairs_save[index_of_fitting_pair])
-
-    return layer_sorted
-"""
-
 def sort_point_pairs(point_pairs):
     point_pairs_sorted = []
     
@@ -262,17 +358,64 @@ def plane_pairs(pair_arr):
             new_layer.append(new_element)
         new_arr.append(new_layer)
     return new_arr
-    
 
-def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100):
+def get_layer_lines(layer_points):
+    layer_lines = []
+    for pair in layer_points:
+        layer_lines.append(line(pair[0], pair[-1]))
+    return layer_lines
+
+def get_layer_lines_(layer_points):
+    layer_lines = []
+    for element in layer_points:
+        element_lines = []
+        for pair in element:
+            element_lines.append(line(pair[0], pair[-1]))
+        layer_lines.append(element_lines)
+
+    return layer_lines
+
+def create_fill_layer_x(line_count, line_width, layer_lines):
+    layer = []
+    for width in range(line_count):
+        line_element = [] # line at width "element"
+        check_num = width * line_width
+        for line in layer_lines:
+            point = line.calcVfromX(check_num)
+            if point != None:
+                line_element.append(point)
+        layer.append(line_element)
+    return layer
+
+def create_fill_layer_y(line_count, line_width, layer_lines):
+    layer = []
+    for width in range(line_count):
+        line_element = [] # line at width "element"
+        check_num = width * line_width
+        for line in layer_lines:
+            point = line.calcVfromY(check_num)
+            if point != None:
+                line_element.append(point)
+        layer.append(line_element)
+    return layer
+
+def get_points_from_stl(stl_obj, layer_hight=0.1, x_dim=1, y_dim=1, z_dim=1, offset=100, printer_x=2000, printer_y=2000):
     layer_count = z_dim / layer_hight
 
     triangles = add_dim(stl_obj, x_dim, y_dim, z_dim)
     triangles = nrml_points(triangles, offset)
-    triangle_lines = create_lines(triangles)
-    point_pairs = slice_z(triangle_lines, layer_hight, layer_count) # slice z returns only []
+    obj_triangle_lines = create_lines(triangles)
+    point_pairs = slice_z(obj_triangle_lines, layer_hight, layer_count, printer_width_x=printer_x, printer_width_y=printer_y)
+
+    # note for layer
+    # is slice_z the right part to add top and bottom fill 
+    # because of point pair sorting ?
+    # could get to some problem with wrong path because walls lines in and infill lines are not orderd 
+    # wall lines could to to infill lines... 
+
     point_pairs = sort_point_pairs(point_pairs)
     points = plane_pairs(point_pairs) # needs to be changes for multiple elements in one layer
+    
     return points
 
 def show_points(points):
@@ -291,7 +434,6 @@ def main():
 
     points = get_points_from_stl(obj, x_dim=100, y_dim=100, z_dim=100)
     show_points(points)
-
 
 if __name__ == '__main__':
     main()
