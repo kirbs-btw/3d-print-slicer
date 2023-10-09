@@ -1,3 +1,5 @@
+import math
+
 class line:
     def __init__(self, v1, v2):
         self.supportV = [0, 0, 0]
@@ -132,6 +134,19 @@ class line:
         
         return [x1, x2, x3]
     
+def unit_v(v):
+    return math.sqrt(v[0]**2 + v[1] ** 2 + v[2] ** 2)
+
+def unit_v(v):
+    length = unit_v(v)
+    x1 = v[0] / length
+    x2 = v[1] / length
+    x3 = v[2] / length 
+
+    unit_v = [x1, x2, x3]
+
+    return unit_v 
+
 def line_cross():
     """
     three ways:
