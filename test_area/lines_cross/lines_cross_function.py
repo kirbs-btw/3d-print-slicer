@@ -147,7 +147,20 @@ def unit_v(v):
 
     return unit_v 
 
-def line_cross():
+def compare_dir_v(dir_a, dir_b):
+    """
+    copares two vectors if they are equal 
+    equal means == or * -1 == 
+    """
+
+    if dir_a[0] == dir_b[0] and dir_a[1] == dir_b[1] and dir_a[2] == dir_b[2]:
+        return True
+    elif (dir_a[0] * (-1)) == dir_b[0] and (dir_a[1] * (-1)) == dir_b[1] and (dir_a[2] * (-1)) == dir_b[2]:
+        return True
+    else: 
+        return False 
+
+def line_cross(g1, g2):
     """
     three ways:
 
@@ -183,3 +196,23 @@ def line_cross():
     cross: points 
     
     """
+
+    # compare dir v 
+    # could be inverted by -1 so check both cases 
+    dir_v_is_equal = compare_dir_v(g1.directionV, g2.directionV)
+    
+    if dir_v_is_equal:
+        """
+        there could be further calc but if there are infinite solutions 
+        or none is the same for the result
+        """
+        return None 
+
+    # I     g1.sV.x1 + s * g1.dV.x1 = g2.sV.x1 + k * g2.dV.x1
+    # II    g1.sV.x2 + s * g1.dV.x2 = g2.sV.x2 + k * g2.dV.x2
+    # III   g1.sV.x3 + s * g1.dV.x3 = g2.sV.x3 + k * g2.dV.x3
+
+    
+
+
+
