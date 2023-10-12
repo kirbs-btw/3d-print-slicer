@@ -235,10 +235,16 @@ def line_cross(g1, g2):
     dx3 = g2.directionV[2]
 
     # check for edgecases before
-
+    # writing more calculations for the edgecases
+    
+    # if none is equal to 0
     k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
     s = (cx3 + (dx3 * k) - ax3) / bx3
 
+    # if only bx3 is equal to 0
+    k = (ax3 - cx3) / dx3
+    s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
+    
     """
     now setting these inside the lines and if 
     the points are equal there is a intersection 
