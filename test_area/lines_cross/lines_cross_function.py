@@ -234,6 +234,20 @@ def line_cross(g1, g2):
     dx2 = g2.directionV[1]
     dx3 = g2.directionV[2]
 
+    if bx1 == 0: 
+        pass
+    if bx2 == 0: 
+        pass
+    if bx3 == 0:
+        pass
+    if dx1 == 0:
+        pass 
+    if dx2 == 0: 
+        pass 
+    if dx3 == 0:
+        pass
+
+    
     # check for edgecases before
     # writing more calculations for the edgecases
     
