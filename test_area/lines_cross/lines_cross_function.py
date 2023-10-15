@@ -234,39 +234,35 @@ def line_cross(g1, g2):
     dx2 = g2.directionV[1]
     dx3 = g2.directionV[2]
 
+    # check for edgecases before
+    # writing more calculations for the edgecases
+    
     if bx1 == 0: 
         pass
     if bx2 == 0: 
         pass
     if bx3 == 0:
-        pass
+        k = (ax3 - cx3) / dx3
+        s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
     if dx1 == 0:
         pass 
     if dx2 == 0: 
         pass 
     if dx3 == 0:
-        pass
-
-    
-    # check for edgecases before
-    # writing more calculations for the edgecases
+        s = (cx3 - ax3) / bx3
+        k = (ax2 - cx2 + (((cx3 * bx2) - (ax3 * bx2))/bx3)) / dx2
+    if dx3 == 0 and bx3 == 0 and ax3 == cx3:
+        k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))#
+        s = 0 # to be written 
+    if dx3 == 0 and bx3 == 0 and ax3 != cx3:
+        return None
     
     # if none is equal to 0
     k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
     s = (cx3 + (dx3 * k) - ax3) / bx3
-
-    # if only bx3 is equal to 0 dx3 != 0
-    k = (ax3 - cx3) / dx3
-    s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
     
-    # if only dx3 == 0 and bx3 != 0
-    s = (cx3 - ax3) / bx3
-    k = (ax2 - cx2 + (((cx3 * bx2) - (ax3 * bx2))/bx3)) / dx2
-
-    # if dx3 and bx3 == 0 
-    # interesting because we use it the most for the infill calcuations
-    # ax3 == cx3 --> otherwise no solution
-    k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
+    
+    
     
 
 
