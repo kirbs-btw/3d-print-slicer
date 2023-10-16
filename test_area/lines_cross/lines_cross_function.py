@@ -253,34 +253,14 @@ def line_cross(g1, g2):
         k = (ax2 - cx2 + (((cx3 * bx2) - (ax3 * bx2))/bx3)) / dx2
     if dx3 == 0 and bx3 == 0 and ax3 == cx3:
         k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))#
-        s = 0 # to be written 
+        s = (cx1-ax1+(dx1*k))/bx1
     if dx3 == 0 and bx3 == 0 and ax3 != cx3:
         return None
     
     # if none is equal to 0
-    k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
-    s = (cx3 + (dx3 * k) - ax3) / bx3
-    
-    
-    
-    
-
-
-    """
-    now setting these inside the lines and if 
-    the points are equal there is a intersection 
-
-    think about the edge cases with div by 0 
-    cases:
-
-    bx1 != 0
-    bx2 != 0
-    bx3 != 0
-    dx1 != 0
-    dx2 != 0 
-
-    (bx2 * dx1) / (dx2 * dx1) != 1
-    """
+    if (bx2 * dx1) / (dx2 * dx1) != 1:
+        k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
+        s = (cx3 + (dx3 * k) - ax3) / bx3
 
     # comparing if s and k fit in the equation 
     test_point_a = g1.point(s)
