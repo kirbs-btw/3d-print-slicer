@@ -237,21 +237,22 @@ def line_cross(g1, g2):
     # check for edgecases before
     # writing more calculations for the edgecases
     
-    if bx1 == 0: 
+    if bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0: 
+        k = (ax1 - cx1)/dx1
+        s = (cx2+(dx2*k)-ax2)/bx2
+    if bx2 == 0 and bx1 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0: 
         pass
-    if bx2 == 0: 
-        pass
-    if bx3 == 0:
+    if bx3 == 0 and bx1 != 0 and bx2 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
         k = (ax3 - cx3) / dx3
         s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
-    if dx1 == 0:
+    if dx1 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx2 != 0 and dx3 != 0:
         pass 
-    if dx2 == 0: 
+    if dx2 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx3 != 0: 
         pass 
-    if dx3 == 0:
+    if dx3 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0: 
         s = (cx3 - ax3) / bx3
         k = (ax2 - cx2 + (((cx3 * bx2) - (ax3 * bx2))/bx3)) / dx2
-    if dx3 == 0 and bx3 == 0 and ax3 == cx3:
+    if dx3 == 0 and bx3 == 0 and ax3 == cx3 and bx1 != 0 and bx2 != 0 and dx1 != 0 and dx2 != 0:
         k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))#
         s = (cx1-ax1+(dx1*k))/bx1
     if dx3 == 0 and bx3 == 0 and ax3 != cx3:
