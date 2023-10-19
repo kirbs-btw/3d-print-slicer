@@ -240,9 +240,10 @@ def line_cross(g1, g2):
     if bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0: 
         k = (ax1 - cx1)/dx1
         s = (cx2+(dx2*k)-ax2)/bx2
-    if bx2 == 0 and bx1 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0: 
-        pass
-    if bx3 == 0 and bx1 != 0 and bx2 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
+    if bx2 == 0 and bx3 != 0 and dx2 != 0 and dx3 != 0: 
+        k = (ax2-cx2)/dx2
+        s = (cx3+(dx3*k)-ax3)/bx3
+    if bx3 == 0 and bx2 != 0 and dx2 != 0 and dx3 != 0:
         k = (ax3 - cx3) / dx3
         s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
     if dx1 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx2 != 0 and dx3 != 0:
