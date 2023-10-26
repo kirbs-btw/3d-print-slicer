@@ -14,8 +14,11 @@ main.py
 README.md
 LICENS
 demo_stl_files
+
 |--- cube.stl
+
 |--- tree.stl
+
 slicer_lib
 
 # WIP
