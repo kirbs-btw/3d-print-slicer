@@ -1,23 +1,27 @@
 # 3d printing slicer - Bastian Lipka
-This repo is for writing my own slicer from scratch. 
+Writing my one slicer
+ifundament for later use with none planar printing
 
 # Technique
-Slicing the mesh in to points at layers with vector math
-defining lines and slicing with them the layers
-
-To track wich line goes where, slicing by triangle is used. after that the lines can be sorted together by machting ends like with domino. 
-when there are multiple loops there are multiple elements in one layer --> zhop 
-
-top and bottom fill is calculated with checking between the line endings
-through iteration across many values --> by now semi inefficient 
-
-infill can be calculated with pre calc lines and then slcing them along the object borders. the same for flore and top just pushing the line more together. 
+.stl mesh is converted to triangle lines. The lines get sliced
+certain hights to create layers.
+The order of the points in the layer is determined by the conection of the triangles 
+every tris shares an edge --> are conected by algorithm like domino.
+Multiple loop in one layer means multiple elements --> element hop.
 
 # Files
-Still work in progress sorted work will be comming soon 
+main.py
+README.md
+LICENS
+demo_stl_files
+|--- cube.stl
+|--- tree.stl
+slicer_lib
 
 # WIP
-wall thickness could be done by triangular calc 
+Wall thickness could be done with triangular calc
+Infill with pre calc patterns and the intersection of the lines 
+from the wall and the infill lines
 
 # To do
 - infill pattern
