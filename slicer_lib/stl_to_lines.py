@@ -27,9 +27,18 @@ def shift_triangles(triangles, x_offset, y_offset):
 
     return new_triangles
 
-def get_points_from_stl(stl_obj, layer_hight=0.1, obj_x_dim = 10, obj_y_dim = 10, obj_z_dim = 10, x_plate_offset = 10, y_plate_offset = 10):
-    layer_count = obj_z_dim / layer_hight
+def triangles_to_lines(triangles):
+    line_triangles = []
+    for triangle in triangles:
+        line_a = ComplexLine(triangle[0], triangle[1])
+        line_b = ComplexLine(triangle[0], triangle[2])
+        line_c = ComplexLine(triangle[1], triangle[2])
+    line_triangles.append([line_a, line_b, line_c])
 
+    return line_triangles
+
+
+def get_points_from_stl(stl_obj, obj_x_dim = 10, obj_y_dim = 10, obj_z_dim = 10, x_plate_offset = 10, y_plate_offset = 10):
     # stl obj stores sets of 3 point that form a triangle
     point_triangles = stl_obj.vectors
     # adding dimensions to the stl_points
@@ -37,6 +46,6 @@ def get_points_from_stl(stl_obj, layer_hight=0.1, obj_x_dim = 10, obj_y_dim = 10
     # shifting the points on the x and y axis 
     point_triangles = shift_triangles(point_triangles, x_plate_offset, y_plate_offset)
     # converting the three points to three lines to draw the triangle
-    
+    line_triangles = triangles_to_lines(point_triangles)
 
-    pass
+    return line_triangles
