@@ -99,12 +99,25 @@ def sort_point_pairs(layer_point_pairs):
         point_pairs_sorted.append(sort_layer_pairs(layer))
     
     return point_pairs_sorted
-
-
+    
+def plane_pairs(pair_arr):
+    new_arr = []
+    for layer in pair_arr:
+        new_layer = []
+        for element in layer:
+            new_element = []
+            for pair in element:
+                for point in pair:
+                    new_element.append(point)
+            new_layer.append(new_element)
+        new_arr.append(new_layer)
+    return new_arr
 
 def lines_to_points(line_triangles, layer_height, obj_z_height):
     layer_count = obj_z_height / layer_height
 
     # point pairs of obj outline 
     layer_point_pairs = slice_z(line_triangles, layer_height, layer_count)
-
+    # plane pairs so later they can be 
+    # compiled to gcode 
+    layer_points = plane_pairs(layer_point_pairs)
