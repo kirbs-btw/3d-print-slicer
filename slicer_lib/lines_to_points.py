@@ -1,5 +1,6 @@
 import numpy as np
 from Line import *
+# import pv 
 
 def slice_z(line_triangles, layer_height, layer_count_z):
     layer_point_pairs = []
@@ -113,6 +114,16 @@ def plane_pairs(pair_arr):
         new_arr.append(new_layer)
     return new_arr
 
+def show_points(points):
+    point_list = []
+    for i in points:
+        for j in i:
+            point_list.append(j)
+
+    point_cloud = pv.PolyData(point_list)
+    point_cloud.plot(eye_dome_lighting=True)
+
+
 def lines_to_points(line_triangles, layer_height, obj_z_height):
     layer_count = obj_z_height / layer_height
 
@@ -121,3 +132,5 @@ def lines_to_points(line_triangles, layer_height, obj_z_height):
     # plane pairs so later they can be 
     # compiled to gcode 
     layer_points = plane_pairs(layer_point_pairs)
+
+    return layer_points
