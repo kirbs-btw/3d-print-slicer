@@ -1,6 +1,6 @@
 import numpy as np
 from Line import *
-# import pv 
+import pyvista as pv
 
 def slice_z(line_triangles, layer_height, layer_count_z):
     layer_point_pairs = []
@@ -100,8 +100,18 @@ def sort_point_pairs(layer_point_pairs):
         point_pairs_sorted.append(sort_layer_pairs(layer))
     
     return point_pairs_sorted
-    
+
 def plane_pairs(pair_arr):
+    """
+    new format is 
+    [points
+        [layer
+            [element
+                [points]
+            ]
+        ]
+    ]
+    """
     new_arr = []
     for layer in pair_arr:
         new_layer = []
@@ -129,8 +139,8 @@ def lines_to_points(line_triangles, layer_height, obj_z_height):
 
     # point pairs of obj outline 
     layer_point_pairs = slice_z(line_triangles, layer_height, layer_count)
-    # plane pairs so later they can be 
-    # compiled to gcode 
+    
+    # formating points 
     layer_points = plane_pairs(layer_point_pairs)
 
     return layer_points
