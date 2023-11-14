@@ -37,8 +37,10 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
                 the_line = ComplexLine(pair[0], pair[-1])
                 line_element.append(the_line)
             line_layer.append(line_element)
+        obj_wall_lines.append(line_layer)
     
-    
+    return obj_wall_lines
+
 def calc_infill_points(obj_wall_lines, infill_lines):
     # looks at the intersection of an infill line with the walls of the obj
     
@@ -46,11 +48,13 @@ def calc_infill_points(obj_wall_lines, infill_lines):
     
     
 
-def infill_points(obj_wall_point_pairs, infill_type="cross"):
+def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     """
     calculating the infill 
     """
-    infill_points = [] 
+    obj_wall_lines = convert_obj_points_to_line(obj_wall_point_pairs)
+    infill_lines = cross_lines(obj_size_x, obj_size_y, obj_size_z, spacing, layer_height, obj_offset_x, obj_offset_y)
+    infill_points = calc_infill_points(obj_wall_lines, infill_lines)
     
     return infill_points
     
