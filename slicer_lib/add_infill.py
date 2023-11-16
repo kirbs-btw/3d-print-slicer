@@ -7,7 +7,6 @@ def cross_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5
     line_x_count = obj_size_x / spacing
     line_y_count = obj_size_y / spacing 
     
-    
     # creating x lines 
     for height in range(0, obj_size_z, layer_height):
         cross_layer_lines = []
@@ -44,18 +43,27 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
 
 def calc_infill_points(obj_wall_lines, infill_lines):
     # looks at the intersection of an infill line with the walls of the obj
+    # if line hits multiple wall lines we need to find out wich connects to wich 
+    
     infill_points = []
     for layer_index, layer in enumerate(obj_wall_lines):
         infill_layer = []
-        for element in layer:
+        for line in infill_lines[layer_index]:
+            # every line gets one element 
             infill_element = []
-            for element_line in element:
-                for line in infill_lines[layer_index]:
-                    point = intersection(line, element_line)
-                    if point != None:
-                        infill_element.append(point)
+            # if len is 0 - ignore 
+            # if len is 1 - some error with the model  
+            # if len is 2 - normal line
+            # if len > 2 && even multiple lines 
+            # need to be sorted end split in multiple elements 
+            
+            for element in layer:
+                for obj_line in element:
+                    point = intersection(obj_line, line)
+                    infill_element.append(point)
             infill_layer.append(infill_element)
         infill_points.append(infill_layer)
+            
     return infill_points
     
 def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
