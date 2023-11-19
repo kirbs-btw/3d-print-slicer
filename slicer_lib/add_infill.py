@@ -66,13 +66,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             
     return infill_points
     
-def zip_infill_walls(wall_pairs, infill_points):    
-    """
-    adding lines as new elements to the layers in there 
-    """
-    for layer_index, layer in enumerate(wall_pairs):
-        for line in enumerate(infill_points[layer_index):
-            layer.append(line)
+
     
 def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     """
