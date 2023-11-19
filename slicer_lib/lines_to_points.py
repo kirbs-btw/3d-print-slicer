@@ -103,7 +103,7 @@ def sort_point_pairs(layer_point_pairs):
 
 def plane_pairs(pair_arr):
     """
-    new format is 
+    new format is:
     [points
         [layer
             [element
@@ -139,6 +139,9 @@ def lines_to_points(line_triangles, layer_height, obj_z_height):
 
     # point pairs of obj outline 
     layer_point_pairs = slice_z(line_triangles, layer_height, layer_count)
+    
+    layer_point_pairs = sort_point_pairs(layer_point_pairs)
+    return layer_point_pairs
     
     # formating points 
     layer_points = plane_pairs(layer_point_pairs)
