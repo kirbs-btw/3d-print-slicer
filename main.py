@@ -3,6 +3,7 @@ from slicer_lib import stl_to_lines as stltl
 from slicer_lib import lines_to_points as ltp
 from slicer_lib import plane_point_pairs as ppp
 from slicer_lib import add_infill as adi
+from slicer_lib import combine_parts as cop
 
 def main():
     printer_x = 2000
@@ -31,19 +32,18 @@ def main():
     
     
     # infill_point in pair form
-    infill_points = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
+    infill_point_pairs = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
     
     # combine points
-    
-    
-    
-    
+    obj_point_pairs = cop.combine_pairs(obj_layer_point_pairs, infill_point_pairs)
     
     # reformate the point pairs to points 
     # reformat
     # format: new format is:[points[layer[element[points]]]]
-    obj__points = ppp.plane_pairs(obj_layer_point_pairs)
+    obj_points = ppp.plane_pairs(obj_layer_point_pairs)
     
+    # ...
+    # slicing to gcode 
     
 if __name__ == '__main__':
     main()
