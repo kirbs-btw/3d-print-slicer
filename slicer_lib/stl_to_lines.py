@@ -1,5 +1,4 @@
-from Line import *
-import numpy as np
+from Line import Line
 
 def add_dimensions(triangles, obj_x_dim, obj_y_dim, obj_z_dim):
     
@@ -27,9 +26,9 @@ def shift_triangles(triangles, x_offset, y_offset):
 def triangles_to_lines(triangles):
     line_triangles = []
     for triangle in triangles:
-        line_a = ComplexLine(triangle[0], triangle[1])
-        line_b = ComplexLine(triangle[0], triangle[2])
-        line_c = ComplexLine(triangle[1], triangle[2])
+        line_a = Line.ComplexLine(triangle[0], triangle[1])
+        line_b = Line.ComplexLine(triangle[0], triangle[2])
+        line_c = Line.ComplexLine(triangle[1], triangle[2])
     line_triangles.append([line_a, line_b, line_c])
 
     return line_triangles
@@ -40,9 +39,10 @@ def find_min_xyz(triangles):
     z = triangles[0][0][2]
     
     for triangle in triangles:
-        if triangle[0] < x: x = triangle[0]
-        if triangle[1] < y: y = triangle[1]
-        if triangle[2] < z: z = triangle[2]
+        for point in triangle:
+            if point[0] < x: x = point[0]
+            if point[1] < y: y = point[1]
+            if point[2] < z: z = point[2]
         
     return x, y, z
 

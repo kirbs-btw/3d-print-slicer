@@ -51,8 +51,8 @@ def calc_extrusion(points, fac = 1):
 def create_moves(obj_points, fill):
     moves = []
 
-    for layer_index, layer in enumerate(points):
-        line = "G0 Z{}\n;LAYER:{}".format(points[layer_index][0][0][2], (layer_index + 1))
+    for layer_index, layer in enumerate(obj_points):
+        line = "G0 Z{}\n;LAYER:{}".format(layer[0][0][2], (layer_index + 1))
         moves.append(line)
         for element_index, element in enumerate(layer):
             

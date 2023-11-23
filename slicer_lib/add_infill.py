@@ -1,5 +1,5 @@
 from Line import *
-from intersection import *
+
 
 def cross_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     cross_lines = []
@@ -7,19 +7,29 @@ def cross_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5
     line_x_count = obj_size_x / spacing
     line_y_count = obj_size_y / spacing 
     
+    layer_count = int(obj_size_z / layer_height)
+    
     # creating x lines 
-    for height in range(0, obj_size_z, layer_height):
+    for slice_count in range(layer_count):
+        height = slice_count * layer_height
         cross_layer_lines = []
         x_dir_vector = [1, 0, 0]
         y_dir_vector = [0, 1, 0]
-        for x_value in range(obj_offset_x, obj_offset_x, spacing):
+        
+        side_x_slice_count = int(obj_offset_x / spacing)
+        
+        for side_slice_num in range(side_x_slice_count):
+            x_value = side_slice_num * spacing
             support = [x_value, obj_offset_y, height]
-            line = Line(support, x_dir_vector)
+            line = Line.Line(support, x_dir_vector)
             cross_layer_lines.append(line)
             
-        for y_value in range(obj_offset_y, obj_size_y, spacing):
+        side_y_slice_count = int(obj_offset_y / spacing)
+            
+        for side_slice_num in range(side_y_slice_count):
+            y_value = side_slice_num * spacing
             support = [obj_offset_x, y_value, height]
-            line = Line(support, y_dir_vector)
+            line = Line.Line(support, y_dir_vector)
             cross_layer_lines.append(line)
             
         cross_lines.append(cross_layer_lines)
@@ -59,7 +69,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             
             for element in layer:
                 for obj_line in element:
-                    point = intersection(obj_line, line)
+                    point = Line.intersection(obj_line, line)
                     infill_element.append(point)
             infill_layer.append(infill_element)
         infill_points.append(infill_layer)
