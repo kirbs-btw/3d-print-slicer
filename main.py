@@ -12,7 +12,7 @@ def main():
     printer_y = 2000
     printer_z = 2000
     
-    file_path = ''
+    file_path = 'H:/Projekte/Projekte/Project 137/slicer_2/demo_stl_files/cube.stl'
     layer_height = 0.2 # in mm
     obj_x_dim = 50 # in mm
     obj_y_dim = 50 # in mm
@@ -29,7 +29,7 @@ def main():
     
     # wall points
     # format: new format is:[points[layer[element[pair[points]]]]]
-    obj_layer_point_pairs = ltp.lines_to_points(line_triangles, layer_height)
+    obj_layer_point_pairs = ltp.lines_to_points(line_triangles, layer_height, obj_z_dim)
     
     # infill_point in pair form
     infill_point_pairs = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
@@ -45,11 +45,12 @@ def main():
     # format: new format is:[points[layer[element[points]]]]
     obj_points = ppp.plane_pairs(obj_layer_point_pairs)
     
+    # obj_points is empty to be seen
     # ...
     # slicing to gcode 
     gcode = ptg.create_gcode(obj_points)
     
-    gtf.gcdoe_to_file(gcode, file_name, save_path)
+    gtf.gcode_to_file(gcode, file_name, save_path)
     
     
     
