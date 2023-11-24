@@ -43,7 +43,7 @@ def main():
     # reformate the point pairs to points 
     # reformat
     # format: new format is:[points[layer[element[points]]]]
-    obj_points = ppp.plane_pairs(obj_layer_point_pairs)
+    obj_points = ppp.plane_pairs(obj_point_pairs)
     
     # obj_points is empty to be seen
     # ...
@@ -52,7 +52,8 @@ def main():
     
     gtf.gcode_to_file(gcode, file_name, save_path)
     
-    
+    # empty at combine parts
+    # onle three tris in stl_to_linee
     
 if __name__ == '__main__':
     main()
