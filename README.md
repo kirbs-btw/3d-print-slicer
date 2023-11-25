@@ -22,9 +22,7 @@ demo_stl_files
 slicer_lib
 
 # WIP
-Wall thickness could be done with triangular calc
-Infill with pre calc patterns and the intersection of the lines 
-from the wall and the infill lines
+Wall thickness could be done with triangular 
 
 # To do
 - infill pattern
