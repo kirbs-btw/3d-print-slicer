@@ -29,7 +29,7 @@ def triangles_to_lines(triangles):
         line_a = Line.ComplexLine(triangle[0], triangle[1])
         line_b = Line.ComplexLine(triangle[0], triangle[2])
         line_c = Line.ComplexLine(triangle[1], triangle[2])
-    line_triangles.append([line_a, line_b, line_c])
+        line_triangles.append([line_a, line_b, line_c])
 
     return line_triangles
 
@@ -61,12 +61,15 @@ def normal_points(triangles):
 def get_points_from_stl(stl_obj, obj_x_dim = 10, obj_y_dim = 10, obj_z_dim = 10, x_plate_offset = 10, y_plate_offset = 10):
     # stl obj stores sets of 3 point that form a triangle
     point_triangles = stl_obj.vectors
+    
     # normal points - pushing the points into positiv space
     point_triangles = normal_points(point_triangles)
+    
     # adding dimensions to the stl_points
     point_triangles = add_dimensions(point_triangles, obj_x_dim, obj_y_dim, obj_z_dim)
     # shifting the points on the x and y axis 
     point_triangles = shift_triangles(point_triangles, x_plate_offset, y_plate_offset)
+    
     # converting the three points to three lines to draw the triangle
     line_triangles = triangles_to_lines(point_triangles)
 
