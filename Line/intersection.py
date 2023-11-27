@@ -46,7 +46,7 @@ def intersection(g1, g2):
 
     # compare dir v 
     # could be inverted by -1 so check both cases 
-    dir_v_is_equal = compare_dir_v(g1.directionV, g2.directionV)
+    dir_v_is_equal = compare_dir_v(g1.dV, g2.dV)
     
     if dir_v_is_equal:
         """
@@ -60,74 +60,104 @@ def intersection(g1, g2):
     # III   ax3 + s * bx3 = cx3 + k * dx3
 
     # setting up the variables for calculation
-    ax1 = g1.supportV[0]
-    ax2 = g1.supportV[1]
-    ax3 = g1.supportV[2]
-    bx1 = g1.directionV[0]
-    bx2 = g1.directionV[1]
-    bx3 = g1.directionV[2]
-    cx1 = g2.supportV[0]
-    cx2 = g2.supportV[1]
-    cx3 = g2.supportV[2]
-    dx1 = g2.directionV[0]
-    dx2 = g2.directionV[1]
-    dx3 = g2.directionV[2]
+    ax1 = g1.sV[0]
+    ax2 = g1.sV[1]
+    ax3 = g1.sV[2]
+    bx1 = g1.dV[0]
+    bx2 = g1.dV[1]
+    bx3 = g1.dV[2]
+    cx1 = g2.sV[0]
+    cx2 = g2.sV[1]
+    cx3 = g2.sV[2]
+    dx1 = g2.dV[0]
+    dx2 = g2.dV[1]
+    dx3 = g2.dV[2]
 
     # check for edgecases before
     # writing more calculations for the edgecases
     
-    if bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0: 
+    # lines:
+    """
+    print()
+    print("{} + s*{} = {} + k*{}".format(ax1, bx1, cx1, dx1))
+    print("{} + s*{} = {} + k*{}".format(ax2, bx2, cx2, dx2))
+    print("{} + s*{} = {} + k*{}".format(ax3, bx3, cx3, dx3))
+    """
+    
+    if bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
         k = (ax1 - cx1)/dx1
         s = (cx2+(dx2*k)-ax2)/bx2
-    if bx2 == 0 and bx3 != 0 and dx2 != 0 and dx3 != 0: 
+    elif bx2 == 0 and bx3 != 0 and dx2 != 0 and dx3 != 0: 
         k = (ax2-cx2)/dx2
         s = (cx3+(dx3*k)-ax3)/bx3
-    if bx3 == 0 and bx2 != 0 and dx2 != 0 and dx3 != 0:
+    elif bx3 == 0 and bx2 != 0 and dx2 != 0 and dx3 != 0:
         k = (ax3 - cx3) / dx3
         s = (cx2 - ax2 + (((ax3 * dx2) - (cx3 * dx2))/dx3))/bx2
-    if dx1 == 0 and bx1 != 0 and dx2 != 0:
+    elif dx1 == 0 and bx1 != 0 and dx2 != 0:
         s = (cx1 - ax1) / bx1
         k = (ax2 + (bx2 * s) - cx2)/dx2 
-    if dx2 == 0 and bx2 != 0 and dx1 != 0: 
+    elif dx2 == 0 and bx2 != 0 and dx1 != 0: 
         s = (cx2-ax2) / bx2
         k = (ax1 + (bx1 * s) - cx1) / dx1
-    if dx3 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0: 
+    elif dx3 == 0 and bx1 != 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0: 
         s = (cx3 - ax3) / bx3
         k = (ax2 - cx2 + (((cx3 * bx2) - (ax3 * bx2))/bx3)) / dx2
-    if bx3 == 0 and dx3 == 0 and bx1 == 0 and dx1 != 0 and dx2 != 0:
+    elif bx3 == 0 and dx3 == 0 and bx1 == 0 and dx1 != 0 and dx2 != 0:
         s = (ax1 - cx1) / dx1
         k = (ax2 + (bx2 * s) - cx2) / dx2
-    if bx3 == 0 and dx3 == 0 and bx2 == 0 and dx1 != 0 and dx2 != 0:
+    elif bx3 == 0 and dx3 == 0 and bx2 == 0 and dx1 != 0 and dx2 != 0:
         s = (ax2 - cx2) / dx2
         k = (ax1 + (bx1*s) - cx1) / dx1
-    if bx3 == 0 and dx3 == 0 and dx1 == 0 and bx1 != 0 and dx2 != 0:
+    elif bx3 == 0 and dx3 == 0 and dx1 == 0 and bx1 != 0 and dx2 != 0:
         s = (cx1 - ax1) / bx1
         k = (ax2 + (bx2*s) - cx2) / dx2
-    if bx3 == 0 and dx3 == 0 and dx2 == 0:
+    elif bx3 == 0 and dx3 == 0 and dx2 == 0:
         s = (cx2-ax2) / bx2
         k = (ax1 + (bx1*s) - cx1) / dx1
-    if bx3 == 0 and dx3 == 0 and bx1 == 0 and dx2 == 0 and bx2 != 0 and dx1 != 0:
+    elif bx3 == 0 and dx3 == 0 and bx1 == 0 and dx2 == 0 and bx2 != 0 and dx1 != 0:
         s = (cx2 - ax2) / bx2
         k = (ax1 - cx1) / dx1
-    if bx3 == 0 and dx3 == 0 and bx2 == 0 and dx1 == 0 and bx1 != 0 and dx2 != 0:
+    elif bx3 == 0 and dx3 == 0 and bx2 == 0 and dx1 == 0 and bx1 != 0 and dx2 != 0:
         s = (cx1 - ax1) / bx1
         k = (ax2 - cx2) / dx2
-    if dx3 == 0 and bx3 == 0 and ax3 == cx3 and bx1 != 0 and bx2 != 0 and dx1 != 0 and dx2 != 0:
+    elif dx3 == 0 and bx3 == 0 and ax3 == cx3 and bx1 != 0 and bx2 != 0 and dx1 != 0 and dx2 != 0:
         k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))#
         s = (cx1-ax1+(dx1*k))/bx1
-    if dx3 == 0 and bx3 == 0 and ax3 != cx3:
+    elif bx1 == 0 and dx1 == 0 and  ax1 != cx1:
         return None
+    elif bx2 == 0 and dx2 == 0 and  ax2 != cx2:
+        return None
+    elif dx3 == 0 and bx3 == 0 and ax3 != cx3:
+        return None
+    elif bx1 == 0 and cx1 == 0 and dx2 == 0 and cx3 == 0 and dx3 == 0 and bx2 != 0:
+        k = ax1 
+        s = (cx2 - ax2) / bx2
+    elif bx2 == 0 and dx2 == 0 and ax2 == cx2 and dx3 == 0:
+        s = (cx3 - ax3) / bx3
+        k = ax1 + s*bx1 
+    elif dx1 == 0 and bx2 == 0 and dx3 == 0:
+        k = (ax2 - cx2) / dx2
+        s = (cx1 - ax1) / bx1
+    elif dx1 == 0 and bx2 == 0 and dx3 == 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax2 - cx2) / dx2
+        
     
     # if none is equal to 0
-    if (bx2 * dx1) / (dx2 * dx1) != 1:
+    elif (bx2 * dx1) / (dx2 * dx1) != 1:
         k = ((ax2/dx2)-(cx2/dx2)+((bx2*cx1)/(dx2*bx1))-((bx2*ax1)/(dx2*bx1)))/(1-((bx2*dx1)/(dx2*dx1)))
         s = (cx3 + (dx3 * k) - ax3) / bx3
 
+    
+    
     # comparing if s and k fit in the equation 
+    if math.isnan(k) or math.isnan(s): return None
+    
     test_point_a = g1.point(s)
     test_point_b = g2.point(k)
 
     # s and k don't fit the lines don't cross 
     if vector_is_equal(test_point_a, test_point_b):
+        print(test_point_a)
         return test_point_a
     return None
