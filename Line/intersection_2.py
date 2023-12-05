@@ -113,8 +113,20 @@ def intersection(g1, g2):
     elif bx1 == 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 != 0:
         s = (cx3 - ax3) / bx3
         k = (ax1 - cx1) / dx1
-    
-    
+    elif bx1 == 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 == 0:
+        k = (ax1 - cx1) / dx1
+        s = (cx3 - ax3) / bx3
+    elif bx1 == 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
+        k = (ax1 - cx1) / dx1
+        s = (cx3 + dx3*k - ax3) / bx3
+    elif bx1 == 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 == 0:
+        return None
+    elif bx1 == 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 != 0:
+        k = (ax3 - cx3) / dx3
+        s = (cx2 - ax2) / bx2
+    elif bx1 == 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 != 0 and dx3 == 0:
+        return None
+        
     
     
     test_point_a = g1.point(s)
@@ -143,11 +155,11 @@ def intersection(g1, g2):
 001 010 - 
 001 011 - 
 001 100 - 
-001 101
-001 110
-001 111
-010 000
-010 001
+001 101 -
+001 110 - 
+001 111 - 
+010 000 - 
+010 001 -
 010 010
 010 011
 010 100
