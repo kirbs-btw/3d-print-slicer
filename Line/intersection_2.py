@@ -143,6 +143,25 @@ def intersection(g1, g2):
         s = (cx2 + dx2*k - ax2) / bx2
     elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 == 0 and dx2 == 0 and dx3 == 0:
         return None
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 == 0 and dx2 == 0 and dx3 != 0:
+        s = (cx2 - ax2) / bx2
+        k = (ax3 + s*bx3 - cx3) / dx3
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 == 0 and dx2 != 0 and dx3 == 0:
+        s = (cx3 - ax3) / bx3
+        k = (ax2 + s*bx2 - cx2) / dx2
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 == 0 and dx2 != 0 and dx3 != 0:
+        k = (bx2*ax3 + bx3*cx2 - bx3*ax2 - cx3*bx2)/(dx3*bx2 - bx3*dx2)
+        s = (cx2 + dx2*k - ax2) / bx2
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 == 0:
+        s = (cx2 - ax2) / bx2
+        k = (ax1 - cx1) / dx1
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 != 0:
+        s = (cx2 - ax2) / bx2
+        k = (ax1 - cx1) / dx1
+    
+    
+    
+        
         
     test_point_a = g1.point(s)
     test_point_b = g2.point(k)
@@ -182,11 +201,11 @@ def intersection(g1, g2):
 010 110 -
 010 111 -
 011 000 -
-011 001
-011 010
-011 011
-011 100
-011 101
+011 001 -
+011 010 - 
+011 011 -
+011 100 - 
+011 101 - 
 011 110
 011 111
 100 000
