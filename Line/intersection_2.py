@@ -158,7 +158,15 @@ def intersection(g1, g2):
     elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 != 0:
         s = (cx2 - ax2) / bx2
         k = (ax1 - cx1) / dx1
-    
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 == 0:
+        s = (cx3 - ax3) / bx3
+        k = (ax1 - cx1) / dx1
+    elif bx1 == 0 and bx2 != 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
+        k = (ax1 - cx1) / dx1
+        s = (cx2 + dx2*k - ax2) / bx2
+    elif bx1 != 0 and bx2 == 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 == 0:
+        return None
+        
     
     
         
@@ -206,9 +214,9 @@ def intersection(g1, g2):
 011 011 -
 011 100 - 
 011 101 - 
-011 110
-011 111
-100 000
+011 110 -
+011 111 - 
+100 000 - 
 100 001
 100 010
 100 011
