@@ -183,9 +183,39 @@ def intersection(g1, g2):
     elif bx1 != 0 and bx2 == 0 and bx3 == 0 and dx1 != 0 and dx2 != 0 and dx3 == 0:
         k = (ax2 - cx2) / dx2
         s = (cx1 + dx1*k - ax1) / bx1
+    elif bx1 != 0 and bx2 == 0 and bx3 == 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
+        k = (ax2 - cx2) / dx2
+        s = (cx1 + dx1*k - ax1) / bx1
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 == 0 and dx2 == 0 and dx3 == 0:
+        return None
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 == 0 and dx2 == 0 and dx3 != 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax3 + s*bx3 - cx3) / dx3
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 == 0 and dx2 != 0 and dx3 == 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax2 - cx2) / dx2
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 == 0 and dx2 != 0 and dx3 != 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax2 - cx2) / dx2
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 == 0:
+        s = (cx3 - ax3) / bx3
+        k = (ax1 + s*bx1 - cx1) / dx1
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 == 0 and dx3 != 0:
+        k = (bx1*ax3 + bx3*cx1 - bx3*ax1 - cx3*bx1)/(dx3*bx1 - bx3*dx1)
+        s = (cx1 + dx1*k - ax1) / bx1
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 == 0:
+        k = (ax2 - cx2) / dx2
+        s = (cx3 - ax3) / bx3
+    elif bx1 != 0 and bx2 == 0 and bx3 != 0 and dx1 != 0 and dx2 != 0 and dx3 != 0:
+        k = (bx1*ax3 + bx3*cx1 - bx3*ax1 - cx3*bx1)/(dx3*bx1 - bx3*dx1)
+        s = (cx1 + dx1*k - ax1) / bx1
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 == 0:
+        return None
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 != 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax3 - cx3) / dx3
         
-    
-    
+        
         
         
     test_point_a = g1.point(s)
@@ -239,18 +269,18 @@ def intersection(g1, g2):
 100 011 - 
 100 100 - 
 100 101 - 
-100 110
-100 111
-101 000
-101 001
-101 010
-101 011
-101 100
-101 101
-101 110
-101 111
-110 000
-110 001
+100 110 - 
+100 111 - 
+101 000 - 
+101 001 -
+101 010 - 
+101 011 - 
+101 100 - 
+101 101 - 
+101 110 - 
+101 111 - 
+110 000 - 
+110 001 - 
 110 010
 110 011
 110 100
