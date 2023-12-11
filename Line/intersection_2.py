@@ -214,7 +214,21 @@ def intersection(g1, g2):
     elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 == 0 and dx3 != 0:
         s = (cx1 - ax1) / bx1
         k = (ax3 - cx3) / dx3
-        
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 != 0 and dx3 == 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax2 + s*bx2 - cx2) / dx2
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 == 0 and dx2 != 0 and dx3 != 0:
+        s = (cx1 - ax1) / bx1
+        k = (ax2 + s*bx2 - cx2) / dx2
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 != 0 and dx2 == 0 and dx3 == 0:
+        s = (cx2 - ax2) / bx2
+        k = (ax1 + s*bx1 - cx1) / dx1
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 != 0 and dx2 == 0 and dx3 != 0:
+        s = (cx2 - ax2) / bx2
+        k = (ax1 + s*bx1 - cx1) / dx1
+    elif bx1 != 0 and bx2 != 0 and bx3 == 0 and dx1 != 0 and dx2 != 0 and dx3 == 0:
+        k = (bx1*ax2 + bx2*cx1 - bx2*ax1 - cx2*bx1)/(dx2*bx1 - bx2*dx1)
+        s = (cx1 + dx1*k - ax1) / bx1
         
         
         
@@ -281,11 +295,11 @@ def intersection(g1, g2):
 101 111 - 
 110 000 - 
 110 001 - 
-110 010
-110 011
-110 100
-110 101
-110 110
+110 010 -
+110 011 - 
+110 100 - 
+110 101 - 
+110 110 - 
 110 111
 111 000
 111 001
