@@ -160,11 +160,18 @@ def intersection(g1, g2):
     test_point_b = g2.point(k)
 
     # s and k don't fit the lines don't cross 
-    if vector_is_equal(test_point_a, test_point_b):
+    if vector_is_equal(test_point_a, test_point_b) and test_point_a != None and test_point_b != None:
         print(test_point_a)
         return test_point_a
     return None
+"""
+bug repot:
+    - prints None even with check 
+    - not sure if there is an issue with the accuarcy of the points
+    - rounding to some digit place ?
 
+
+"""
 
 """
 the intersection of two points is a hell 
