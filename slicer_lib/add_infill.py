@@ -1,40 +1,37 @@
 from Line import Line
 from Line import intersection
-
+import math
 
 def cross_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     cross_lines = []
     
-    line_x_count = obj_size_x / spacing
-    line_y_count = obj_size_y / spacing 
+    start_point_x = obj_offset_x
+    end_point_x = obj_offset_x + obj_size_x
+    x_count = int(math.ceil((end_point_x - start_point_x) / spacing))
+     
+    start_point_y = obj_offset_y
+    end_point_y = obj_offset_y + obj_size_y
+    y_count = int(math.ceil((end_point_y - start_point_y) / spacing))
     
-    layer_count = int(obj_size_z / layer_height)
+    layer_count = int(math.ceil(obj_size_z / layer_height))
     
-    # creating x lines 
-    for slice_count in range(layer_count):
-        height = slice_count * layer_height
-        cross_layer_lines = []
-        x_dir_vector = [1, 0, 0]
-        y_dir_vector = [0, 1, 0]
+    xVdir = [0, 1, 0]
+    yVdir = [1, 0, 0]
         
-        side_x_slice_count = int(obj_offset_x / spacing)
-        
-        for side_slice_num in range(side_x_slice_count):
-            x_value = side_slice_num * spacing
-            support = [x_value, obj_offset_y, height]
-            line = Line.Line(support, x_dir_vector)
-            cross_layer_lines.append(line)
-            
-        side_y_slice_count = int(obj_offset_y / spacing)
-            
-        for side_slice_num in range(side_y_slice_count):
-            y_value = side_slice_num * spacing
-            support = [obj_offset_x, y_value, height]
-            line = Line.Line(support, y_dir_vector)
-            cross_layer_lines.append(line)
-            
-        cross_lines.append(cross_layer_lines)
-
+    for layer in range(layer_count):
+        line_layer = []
+        current_z = layer * layer_height
+        for pos in range(x_count):
+            pos_space = pos * spacing
+            supportV = [pos_space + start_point_x, 0, current_z]
+            this_line = Line.Line(supportV, xVdir)
+            line_layer.append(this_line)
+        for pos in range(y_count):
+            pos_space = pos * spacing
+            supportV = [0, pos_space + start_point_x, current_z]
+            this_line = Line.Line(supportV, yVdir)
+            line_layer.append(this_line)
+        cross_lines.append(line_layer)    
     return cross_lines
 
 def convert_obj_points_to_line(obj_wall_point_pairs):
@@ -72,6 +69,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
                 for obj_line in element:
                     point = intersection.intersection(obj_line, line)
                     if point != None:
+                        print(point)
                         infill_element.append(point)
             if infill_element != []:
                 infill_layer.append(infill_element)
@@ -86,9 +84,12 @@ def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, ob
     """
     calculating the infill 
     """
+    # output
     obj_wall_lines = convert_obj_points_to_line(obj_wall_point_pairs)
     infill_lines = cross_lines(obj_size_x, obj_size_y, obj_size_z, spacing, layer_height, obj_offset_x, obj_offset_y)
     infill_points = calc_infill_points(obj_wall_lines, infill_lines)
+    
+    
     
     return infill_points
     
