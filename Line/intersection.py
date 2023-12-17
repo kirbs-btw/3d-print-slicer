@@ -1,5 +1,5 @@
 import math
-from Line import ComplexLine
+
  
 def unit_v(v):
     return math.sqrt(v[0]**2 + v[1] ** 2 + v[2] ** 2)
@@ -172,7 +172,6 @@ def intersection(g1, g2):
         s = (cx1 - ax1) / bx1
         k = (ax3 - cx3) / dx3
     elif bx1 != 0 and bx2 == 0 and bx3 == 0 and dx1 == 0 and dx2 != 0 and dx3 == 0:
-        print("hello")
         s = (cx1 - ax1) / bx1
         k = (ax2 - cx2) / dx2
     elif bx1 != 0 and bx2 == 0 and bx3 == 0 and dx1 == 0 and dx2 != 0 and dx3 != 0:
@@ -261,26 +260,23 @@ def intersection(g1, g2):
     else: 
         return None
     
-    print(s, k)
-    
     test_point_a = g1.point(s)
     test_point_b = g2.point(k)
-    print(test_point_a)
-    print(test_point_b)
     
     # s and k don't fit the lines don't cross 
     if vector_is_equal(test_point_a, test_point_b):
+        print(test_point_a)
         return test_point_a
     return None
 
 def main():
     # test of the things
     
-    v1g1 = [2, 2, -3]
-    v2g1 = [2, 3, 2]
+    v1g1 = [1, 1, 0]
+    v2g1 = [4, 4, 0]
     
-    v1g2 = [3, 0, -1]
-    v2g2 = [1, -2, 2] 
+    v1g2 = [0, 3, 0]
+    v2g2 = [1, 2, 0] 
     
     a = ComplexLine(v1g1, v2g1)
     b = ComplexLine(v1g2, v2g2)
@@ -288,14 +284,9 @@ def main():
     print(intersection(a, b))
     
 if __name__ == '__main__':
+    from Line import ComplexLine
     main()
 
-"""
-simple lines are beeing correctly calc 
-but complex lines have some issues
-- wip 
-
-"""
 
 """  
 - thinking about writing the 64 solutions to have a working script 
