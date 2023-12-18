@@ -68,7 +68,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             for element in layer:
                 for obj_line in element:
                     point = intersection.intersection(obj_line, line)
-                    if point != None:
+                    if point != None and obj_line.pointInsideLine(point):
                         print(point)
                         infill_element.append(point)
             if infill_element != []:
@@ -77,19 +77,17 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             infill_points.append(infill_layer)
             
     return infill_points
-    
-
-    
+       
 def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     """
     calculating the infill 
     """
-    # output
+    # converted wall lines of obj to line obj
     obj_wall_lines = convert_obj_points_to_line(obj_wall_point_pairs)
+    # generating infill lines "cross pattern"
     infill_lines = cross_lines(obj_size_x, obj_size_y, obj_size_z, spacing, layer_height, obj_offset_x, obj_offset_y)
+    # finding the infill lines inside the obj 
     infill_points = calc_infill_points(obj_wall_lines, infill_lines)
-    
-    
     
     return infill_points
     
