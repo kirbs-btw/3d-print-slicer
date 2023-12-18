@@ -39,8 +39,9 @@ class ComplexLine:
         self.lower_z_bound = 0
         self.higher_z_bound = 0
         
+        
         self.calcVar(v1, v2)
-    
+        
     def calcVar(self, v1, v2):
         """Calculates missing values
 
@@ -141,11 +142,26 @@ class ComplexLine:
         return [x1, x2, x3]
 
     def point(self, s):
-        x1 = self.dV[0] + self.sV[0] * s
-        x2 = self.dV[1] + self.sV[1] * s
-        x3 = self.dV[2] + self.sV[2] * s
+        x1 = self.sV[0] + self.dV[0] * s
+        x2 = self.sV[1] + self.dV[1] * s
+        x3 = self.sV[2] + self.dV[2] * s
         return [x1, x2, x3]
     
+    def pointInsideLine(self, point):
+        """
+        checks if the given point is inside the bounds of the line
+        give point has to be first calculated to be on the line
+        here is the check if it is in bounds of the dimensions of the line
+        """
+        if point[0] < self.lower_x_bound or point[0] > self.higher_x_bound:
+            return False
+        if point[1] < self.lower_y_bound or point[1] > self.higher_y_bound:
+            return False
+        if point[2] < self.lower_z_bound or point[2] > self.higher_z_bound:
+            return False
+        return True
+        
+
     def print(self):
         print('---ComplexLine---')
         print('sV: {}'.format(self.sV))
