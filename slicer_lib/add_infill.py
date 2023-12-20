@@ -49,6 +49,7 @@ def test_pattern(layer_height=0.2):
 
 def convert_obj_points_to_line(obj_wall_point_pairs):
     obj_wall_lines = []
+    # starts with 0.2 why ? 
     
     for layer in obj_wall_point_pairs:
         line_layer = []
@@ -67,6 +68,10 @@ def calc_infill_points(obj_wall_lines, infill_lines):
     # if line hits multiple wall lines we need to find out wich connects to wich 
     
     infill_points = []
+    
+    print(obj_wall_lines[0][0][0].sV[2])
+    print(infill_lines[0][0].sV[2])
+    
     for layer_index, layer in enumerate(obj_wall_lines):
         infill_layer = []
         for line in infill_lines[layer_index]:
@@ -80,6 +85,12 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             
             for element in layer:
                 for obj_line in element:
+                    """
+                    print("element")
+                    print(obj_line.sV[2])
+                    print("infill")
+                    print(line.sV[2])
+                    """
                     point = intersection.intersection(obj_line, line)
                     if point != None and obj_line.pointInsideLine(point):
                         print(point)
