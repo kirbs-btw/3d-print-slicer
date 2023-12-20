@@ -33,27 +33,37 @@ def main():
     
     # infill_point in pair form
     infill_point_pairs = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
-    
+    print(infill_point_pairs)
+
     # fill bottom and top
 
-    
     # combine points
     obj_point_pairs = cop.combine_pairs(obj_layer_point_pairs, infill_point_pairs)
     
     # reformate the point pairs to points 
-    # reformat
     # format: new format is:[points[layer[element[points]]]]
+    # obj_points = ppp.plane_pairs(obj_layer_point_pairs)
     obj_points = ppp.plane_pairs(obj_point_pairs)
     
-    # obj_points is empty to be seen
-    # ...
     # slicing to gcode 
+    
     gcode = ptg.create_gcode(obj_points)
     
     gtf.gcode_to_file(gcode, file_name, save_path)
     
-    # empty at combine parts
-    # onle three tris in stl_to_linee
+   
+    # without the infill the code works fine 
+    # searching the infill issue 
     
 if __name__ == '__main__':
     main()
+    
+    
+"""
+Bug report 
+
+layer lines and infill lines dont start at the same hight 
+--> out of sync --> no lines intersect 
+--> shifted by 0.2
+    
+"""
