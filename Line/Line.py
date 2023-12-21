@@ -92,7 +92,8 @@ class ComplexLine:
         x1 = self.sV[0] + self.dV[0] * v
 
         # check if point is in between the original points 
-        if not x1 > self.lower_x_bound or not x1 < self.higher_x_bound:
+
+        if not x1 >= self.lower_x_bound or not x1 <= self.higher_x_bound:
             return None
         
         x2 = self.sV[1] + self.dV[1] * v
@@ -108,7 +109,7 @@ class ComplexLine:
         x2 = self.sV[1] + self.dV[1] * v
 
         # check if point is in between the original points 
-        if not x2 > self.lower_y_bound or not x2 < self.higher_y_bound:
+        if not x2 >= self.lower_y_bound or not x2 <= self.higher_y_bound:
             return None
         
         x1 = self.sV[0] + self.dV[0] * v
@@ -124,7 +125,7 @@ class ComplexLine:
         x3 = self.sV[2] + self.dV[2] * v
 
         # check if point is in between the original points 
-        if not x3 > self.lower_z_bound or not x3 < self.higher_z_bound:
+        if not x3 >= self.lower_z_bound or not x3 <= self.higher_z_bound:
             return None
         
         x1 = self.sV[0] + self.dV[0] * v
