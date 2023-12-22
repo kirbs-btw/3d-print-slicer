@@ -41,7 +41,7 @@ def test_pattern(layer_height=0.2):
     for count in range(layer_count):
         layer = []
         current_height = count * layer_height
-        line = Line.Line([0, 0, current_height], [1, 1, current_height])
+        line = Line.Line([0.5, 0, current_height], [1, 1, 0])
         layer.append(line)
         lines.append(layer)
     return lines
@@ -56,6 +56,8 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
         for element in layer:
             line_element = []
             for pair in element:
+                print(pair[0])
+                print(pair[-1])
                 the_line = Line.ComplexLine(pair[0], pair[-1])
                 line_element.append(the_line)
             line_layer.append(line_element)
@@ -69,8 +71,8 @@ def calc_infill_points(obj_wall_lines, infill_lines):
     
     infill_points = []
     
-    print(obj_wall_lines[0][0][0].sV[2])
-    print(infill_lines[0][0].sV[2])
+    # print(obj_wall_lines[0][0][0].sV[2])
+    # print(infill_lines[0][0].sV[2])
     
     for layer_index, layer in enumerate(obj_wall_lines):
         infill_layer = []
@@ -91,8 +93,13 @@ def calc_infill_points(obj_wall_lines, infill_lines):
                     print("infill")
                     print(line.sV[2])
                     """
+                    # obj_line.info()
+                    # line.info()
+
+
                     point = intersection.intersection(obj_line, line)
-                    if point != None and obj_line.pointInsideLine(point):
+                    if point != None:
+                    # if point != None and obj_line.pointInsideLine(point):
                         print(point)
                         infill_element.append(point)
             if infill_element != []:
@@ -118,3 +125,10 @@ def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, ob
     
 if __name__ == '__main__':
     pass
+
+
+# could be an issues with the rounding of the numbers 
+# the point pairs are line going up and down so every one is skew to the other
+# 49.800000000000004 goes to 49.8
+# the dirV z coord is -0.000000000000004
+# instead of 0...
