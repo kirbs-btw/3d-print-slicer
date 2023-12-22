@@ -26,6 +26,13 @@ class Line:
         x3 = self.dV[2] + self.sV[2] * s
         return [x1, x2, x3]
 
+    def info(self):
+        print(type(self))
+        print("Support V: {}".format(self.sV))
+        print("Direction V: {}".format(self.dV))
+        
+
+
 class ComplexLine:
     def __init__(self, v1, v2):
         self.a = v1
@@ -176,3 +183,8 @@ class ComplexLine:
         print('hz: {}'.format(self.higher_z_bound))
         print('lz: {}'.format(self.lower_z_bound))
         print('------')
+
+    def info(self):
+        print(type(self))
+        print("Support V: {}".format(self.sV))
+        print("Direction V: {}".format(self.dV))
