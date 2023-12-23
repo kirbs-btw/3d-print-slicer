@@ -56,6 +56,11 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
         for element in layer:
             line_element = []
             for pair in element:
+                # converting because of float ppe
+                # janky fix
+                pair[0][2] = round(pair[0][2] * 1000000) / 1000000
+                pair[-1][2] = round(pair[-1][2] * 1000000) / 1000000
+
                 print(pair[0])
                 print(pair[-1])
                 the_line = Line.ComplexLine(pair[0], pair[-1])
