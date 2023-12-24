@@ -61,8 +61,8 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
                 pair[0][2] = round(pair[0][2] * 1000000) / 1000000
                 pair[-1][2] = round(pair[-1][2] * 1000000) / 1000000
 
-                print(pair[0])
-                print(pair[-1])
+                # print(pair[0])
+                # print(pair[-1])
                 the_line = Line.ComplexLine(pair[0], pair[-1])
                 line_element.append(the_line)
             line_layer.append(line_element)
@@ -137,3 +137,8 @@ if __name__ == '__main__':
 # 49.800000000000004 goes to 49.8
 # the dirV z coord is -0.000000000000004
 # instead of 0...
+
+# fixed the fppe 
+# no good fix because of just rounding the num 
+# the lines still dont form intersections
+# 
