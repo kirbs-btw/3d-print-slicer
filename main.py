@@ -12,7 +12,7 @@ def main():
     printer_y = 2000
     printer_z = 2000
     
-    file_path = 'H:/Projekte/Projekte/Project 137/slicer_2/demo_stl_files/cube.stl'
+    file_path = 'F:/Projekte/Projekte/Project 137/slicer_2/demo_stl_files/cube.stl'
     layer_height = 0.2 # in mm
     obj_x_dim = 50 # in mm
     obj_y_dim = 50 # in mm
@@ -22,7 +22,7 @@ def main():
     y_plate_offset = 50
 
     file_name = 'test.gcode'
-    save_path = 'H:/Projekte/Projekte/Project 137/slicer_2/out/'
+    save_path = 'F:/Projekte/Projekte/Project 137/slicer_2/out/'
 
     stl_obj = mesh.Mesh.from_file(file_path)
     line_triangles = stltl.get_points_from_stl(stl_obj, obj_x_dim=obj_x_dim, obj_y_dim=obj_y_dim, obj_z_dim=obj_z_dim, x_plate_offset=x_plate_offset, y_plate_offset=y_plate_offset)
@@ -30,10 +30,11 @@ def main():
     # wall points
     # format: new format is:[points[layer[element[pair[points]]]]]
     obj_layer_point_pairs = ltp.lines_to_points(line_triangles, layer_height, obj_z_dim)
-    
+    # print(obj_layer_point_pairs[0][0][0][0][2])
+
     # infill_point in pair form
     infill_point_pairs = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
-    print(infill_point_pairs)
+    
 
     # fill bottom and top
 
@@ -57,13 +58,15 @@ def main():
     
 if __name__ == '__main__':
     main()
-    
-    
-"""
-Bug report 
 
-layer lines and infill lines dont start at the same hight 
---> out of sync --> no lines intersect 
---> shifted by 0.2
-    
+"""
+lines are at the same hight but dont intersect ? 
+
+some issue with the param of class --> none  directionV some times
+--> none colliging lines because of missing parts in the line 
+and the wird percision of the points --> lines forming with 
+nums like 100.19999999999
+because of a other num like 1.00000000000000001
+... needs fixing the FPPE --> searching some good way to do it 
+
 """
