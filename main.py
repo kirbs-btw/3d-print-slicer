@@ -69,4 +69,6 @@ nums like 100.19999999999
 because of a other num like 1.00000000000000001
 ... needs fixing the FPPE --> searching some good way to do it 
 
+buggy output of infill functions
+
 """
