@@ -2,6 +2,10 @@ import math
 import numpy as np
 
 def calc_dist_of_points(points, factor=1) -> list:
+    # issue with the format of the added infill points 
+    # patterns are the same 
+    # could be the adding of empty layerers
+
     dist_arr = []
     for layer in points:
         dist_layer = []
@@ -71,10 +75,10 @@ def create_gcode(obj_points):
     fill = calc_extrusion(obj_points, fac = 0.001)
     moves = create_moves(obj_points, fill)
     
-    with open('H:/Projekte/Projekte/Project 137/slicer_2/gcode_parts/top_gcode.txt') as f:
+    with open('gcode_parts/top_gcode.txt') as f:
         top = np.array(f.readlines())
 
-    with open('H:/Projekte/Projekte/Project 137/slicer_2/gcode_parts/end_gcode.txt') as f:
+    with open('gcode_parts/end_gcode.txt') as f:
         end = np.array(f.readlines())
     
     gcode_array = []
@@ -86,5 +90,6 @@ def create_gcode(obj_points):
         gcode_array.append(line)
     for line in end:
         gcode_array.append(line)
+
 
     return gcode_array
