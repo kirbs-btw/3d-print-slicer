@@ -3,8 +3,16 @@
 # combining the elements of the other array to the new one
 # combination issue ?
 
+# strukture of points and infill_points differ from each other 
+
 
 def combine_pairs(obj_points, infill_points):
+    #print(infill_points)
+    # print(infill_points[0])
+    print(obj_points[0][0])
+    print("\n")
+    print(infill_points[0][0])
+
     new_points = []
     for idx, layer in enumerate(obj_points):
         new_layer = []
@@ -13,6 +21,8 @@ def combine_pairs(obj_points, infill_points):
         for element in infill_points[idx]:
             new_layer.append(element)
         new_points.append(new_layer)
+
+
     return new_points
 
 
