@@ -43,7 +43,7 @@ def test_pattern(layer_height=0.2):
         current_height = count * layer_height
         current_height = round(current_height * 1000000) / 1000000
         line = Line.Line([0.5, 0, current_height], [1, 1, 0])
-        line.info()
+        # line.info()
         layer.append(line)
         lines.append(layer)
     return lines
@@ -93,6 +93,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
             # need to be sorted end split in multiple elements 
             
             for element in layer:
+                point_pair = []
                 for obj_line in element:
                     """
                     print("element")
@@ -100,18 +101,19 @@ def calc_infill_points(obj_wall_lines, infill_lines):
                     print("infill")
                     print(line.sV[2])
                     """
-                    obj_line.info()
-                    line.info()
+                    # obj_line.info()
+                    # line.info()
 
                     point = intersection.intersection(obj_line, line)
-                    print("the point you want")
-                    print(point)
-                    if point != None:
-                    # if point != None and obj_line.pointInsideLine(point):
-                        
+                    # print("the point you want")
+                    # print(point)
+                    # if point != None:
+                    if point != None and obj_line.pointInsideLine(point):
+                        point_pair.append(point)
                         # print("eyy point")
-                        infill_element.append(point)
+                        
             # adding even the empty array to continue the sync in the lines 
+                infill_element.append(point_pair)
             infill_layer.append(infill_element)
         if infill_layer != []:
             infill_points.append(infill_layer)
