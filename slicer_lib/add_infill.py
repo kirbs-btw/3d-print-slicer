@@ -2,6 +2,15 @@ from Line import Line
 from Line import intersection
 import math
 
+def x_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
+    x_lines = []
+
+    layer_count = int(math.ceil(obj_size_z / layer_height))
+
+    for layer_count_num in range(layer_count):
+        current_layer_height = layer_count_num * layer_height
+        # inserting horrizontal lines to check the easy calc 
+
 def cross_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, layer_height = 0.2,obj_offset_x = 10, obj_offset_y = 10):
     cross_lines = []
     
@@ -58,8 +67,9 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
         for element in layer:
             line_element = []
             for pair in element:
+
                 # converting because of float ppe
-                # janky fix
+                # not pretty but works 
                 pair[0][2] = round(pair[0][2] * 1000000) / 1000000
                 pair[-1][2] = round(pair[-1][2] * 1000000) / 1000000
 
@@ -128,7 +138,7 @@ def infill_points(obj_wall_point_pairs, infill_type="cross", obj_size_x = 10, ob
     obj_wall_lines = convert_obj_points_to_line(obj_wall_point_pairs)
     # generating infill lines "cross pattern"
     # infill_lines = cross_lines(obj_size_x, obj_size_y, obj_size_z, spacing, layer_height, obj_offset_x, obj_offset_y)
-    infill_lines = test_pattern()
+    infill_lines = cross_lines()
     # finding the infill lines inside the obj 
     infill_points = calc_infill_points(obj_wall_lines, infill_lines)
     
