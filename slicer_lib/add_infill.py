@@ -8,7 +8,7 @@ def x_lines(obj_size_x = 10, obj_size_y = 10, obj_size_z = 10, spacing = 0.5, la
     dirV = [1, 0, 0]
 
     layer_count = int(math.ceil(obj_size_z / layer_height))
-    line_in_layer_count = int(math.ceil(obj_size_x/spacing))
+    line_in_layer_count = int(math.ceil(obj_size_x/spacing)) * 2
 
     for layer_count_num in range(layer_count):
         infill_layer = []
@@ -130,7 +130,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
                     # if point != None:
                     if point != None and obj_line.pointInsideLine(point):
                         point_pair.append(point)
-                        print(point)
+                        # print(point)
                         # print("eyy point")
                         
             # adding even the empty array to continue the sync in the lines 
