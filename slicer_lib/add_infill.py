@@ -92,6 +92,27 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
     
     return obj_wall_lines
 
+def point_len_opt(point):
+    return ((point[0] ** 2) + (point[1] ** 2) + (point[2] ** 2))
+
+def sort_intersection_cross_points(points):
+    # optimizing by not taking the sqrt 
+    # sorting them with depending on the distance to the 
+    # [0, 0, 0] point --> taking the len of the point (no sqrt)
+
+    pointLenArr = []
+    for point in points:
+        pointLenArr.append(point_len_opt(point))
+    
+    # parallel sorting of the points to its distances 
+    
+
+
+
+
+
+    pass 
+
 def calc_infill_points(obj_wall_lines, infill_lines):
     # looks at the intersection of an infill line with the walls of the obj
     # if line hits multiple wall lines we need to find out wich connects to wich 
@@ -104,38 +125,23 @@ def calc_infill_points(obj_wall_lines, infill_lines):
     for layer_index, layer in enumerate(obj_wall_lines):
         infill_layer = []
         for line in infill_lines[layer_index]:
-            # every line gets one element 
-            infill_element = []
-            # if len is 0 - ignore 
-            # if len is 1 - some error with the model  
-            # if len is 2 - normal line
-            # if len > 2 && even multiple lines 
-            # need to be sorted end split in multiple elements 
-            
+            line_intersection_points = []
             for element in layer:
-                point_pair = []
                 for obj_line in element:
-                    """
-                    print("element")
-                    print(obj_line.sV[2])
-                    print("infill")
-                    print(line.sV[2])
-                    """
-                    # obj_line.info()
-                    # line.info()
-
                     point = intersection.intersection(obj_line, line)
-                    # print("the point you want")
-                    # print(point)
-                    # if point != None:
+
+                    # checks if the point exists and is on the line
                     if point != None and obj_line.pointInsideLine(point):
-                        point_pair.append(point)
-                        # print(point)
-                        # print("eyy point")
+                        line_intersection_points.append(point)
+            
+            # sorting the point out
+            # r: if there are two points they belong together 
+            # if there are four we need to find the two pairs
+
+            # format holdingArr[elements[pointpairs[point[], point[]]]]            
+            sorted_layer = sort_intersection_cross_points(line_intersection_points)
+            
                         
-            # adding even the empty array to continue the sync in the lines 
-                infill_element.append(point_pair)
-            infill_layer.append(infill_element)
         if infill_layer != []:
             infill_points.append(infill_layer)
             
