@@ -95,17 +95,42 @@ def convert_obj_points_to_line(obj_wall_point_pairs):
 def point_len_opt(point):
     return ((point[0] ** 2) + (point[1] ** 2) + (point[2] ** 2))
 
+
+def bubbleSortDouble(arr, childArr):
+    n = len(arr)
+    swapped = False
+    
+    for i in range(n-1):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j + 1]:
+                swapped = True
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                childArr[j], childArr[j + 1] = childArr[j + 1], childArr[j]
+         
+        if not swapped:
+            return
+
 def sort_intersection_cross_points(points):
     # optimizing by not taking the sqrt 
     # sorting them with depending on the distance to the 
     # [0, 0, 0] point --> taking the len of the point (no sqrt)
+    if len(points) % 2 != 0:
+        print("something is wrong with the model")
+        return
+    
+
 
     pointLenArr = []
     for point in points:
         pointLenArr.append(point_len_opt(point))
     
     # parallel sorting of the points to its distances 
+    bubbleSortDouble(pointLenArr, points)
+
+    # seperating points into pairs
     
+
+
 
 
 
