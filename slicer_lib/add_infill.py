@@ -129,14 +129,14 @@ def sort_intersection_cross_points(points):
 
     # seperating points into pairs
     
+    elements = []
 
+    for idx in range(int(len(points) / 2)):
+        new_idx = idx * 2
+        elements.append([points[new_idx], points[new_idx+1]])
 
+    return elements
 
-
-
-
-
-    pass 
 
 def calc_infill_points(obj_wall_lines, infill_lines):
     # looks at the intersection of an infill line with the walls of the obj
@@ -165,7 +165,7 @@ def calc_infill_points(obj_wall_lines, infill_lines):
 
             # format holdingArr[elements[pointpairs[point[], point[]]]]            
             sorted_layer = sort_intersection_cross_points(line_intersection_points)
-            
+            # inserting the sorted_layer in 
                         
         if infill_layer != []:
             infill_points.append(infill_layer)
