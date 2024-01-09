@@ -173,8 +173,8 @@ def calc_infill_points(obj_wall_lines, infill_lines):
                 infill_layer.append(element)
 
                         
-        if infill_layer != []:
-            infill_points.append(infill_layer)
+        
+        infill_points.append(infill_layer)
             
     return infill_points
        
