@@ -10,16 +10,31 @@ every tris shares an edge --> are conected by algorithm like domino.
 Multiple loop in one layer means multiple elements --> element hop.
 
 # Files
-main.py
-README.md
-LICENS
-demo_stl_files
-
-|--- cube.stl
-
-|--- tree.stl
-
-slicer_lib
+.
+├── demo_stl_files/
+│   ├── cube.stl
+│   ├── ninecube.stl
+│   └── tree.stl
+├── gcode_parts/
+│   ├── end_gcode.gcode
+│   └── top_gcode.gcode
+├── Line/
+│   ├── __init__.py
+│   ├── intersection.py
+│   └── Line.py
+├── out
+├── slicer_lib/
+│   ├── -__init__.py
+│   ├── add_infill.py
+│   ├── combine_parts.py
+│   ├── gcode_to_file.py
+│   ├── lines_to_points.py
+│   ├── plane_point_pairs.py
+│   ├── points_to_gcode.py
+│   └── stl_to_lines.py
+├── main.py
+├── README.md
+└── LICENSE
 
 # WIP
 Wall thickness could be done with triangular calc
