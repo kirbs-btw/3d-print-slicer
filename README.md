@@ -1,13 +1,24 @@
 # 3d printing slicer - Bastian Lipka
 Writing my one slicer
-ifundament for later use with none planar printing
+fundament for later use with none planar printing
 
 # Technique
-.stl mesh is converted to triangle lines. The lines get sliced
-certain hights to create layers.
-The order of the points in the layer is determined by the conection of the triangles 
-every tris shares an edge --> are conected by algorithm like domino.
-Multiple loop in one layer means multiple elements --> element hop.
+Walls:
+    .stl are triangles
+    slicing them with the layerheight
+    Connection of points depends on the triangles
+    the triangles share edges --> point loop is done 
+    by connecting the same points of different edges --> like domino
+    Multiple loop in one layer means multiple elements --> element hop.
+
+Infill:
+    general infillpattern:
+        generating infillpatterns with the intersections
+        - logic with multipe elements per line
+        --> ordering the intersection points depending on the 
+        dist to the origin --> picking them in pairs 
+        - if the num of intersections is odd --> there is an error with the modle
+
 
 # Files
 .
@@ -42,7 +53,8 @@ Infill with pre calc patterns and the intersection of the lines
 from the wall and the infill lines
 
 # To do
-- infill pattern
+- more infill patterns
 - wall thickness
 - zhop
 - finding good extrusion
+- filling top and bottom 
