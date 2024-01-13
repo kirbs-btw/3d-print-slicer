@@ -19,34 +19,6 @@ Infill:
         dist to the origin --> picking them in pairs 
         - if the num of intersections is odd --> there is an error with the modle
 
-
-# Files
-.
-├── demo_stl_files/
-│   ├── cube.stl
-│   ├── ninecube.stl
-│   └── tree.stl
-├── gcode_parts/
-│   ├── end_gcode.gcode
-│   └── top_gcode.gcode
-├── Line/
-│   ├── __init__.py
-│   ├── intersection.py
-│   └── Line.py
-├── out
-├── slicer_lib/
-│   ├── -__init__.py
-│   ├── add_infill.py
-│   ├── combine_parts.py
-│   ├── gcode_to_file.py
-│   ├── lines_to_points.py
-│   ├── plane_point_pairs.py
-│   ├── points_to_gcode.py
-│   └── stl_to_lines.py
-├── main.py
-├── README.md
-└── LICENSE
-
 # WIP
 Wall thickness could be done with triangular calc
 Infill with pre calc patterns and the intersection of the lines 
