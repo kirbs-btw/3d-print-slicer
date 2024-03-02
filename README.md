@@ -2,6 +2,15 @@
 Writing my one slicer
 fundament for later use with none planar printing
 
+# how to use
+- dowload the repo
+- put your .stl files in the stl folder
+- add your paths and names in the main.py
+- you can test the gcode with your printer or look at it in a normal slicer like cura
+- for sizing and other params change the x,y and z values in the main.py 
+
+
+
 # Technique
 Walls:
     .stl are triangles
