@@ -35,7 +35,6 @@ def main():
     # infill_point in pair form
     infill_point_pairs = adi.infill_points(obj_layer_point_pairs, "cross", obj_x_dim, obj_y_dim, obj_z_dim, spacing=0.5, layer_height=layer_height, obj_offset_x=x_plate_offset, obj_offset_y=y_plate_offset)
     
-
     # fill bottom and top
 
     # combine points
@@ -52,7 +51,6 @@ def main():
     
     gtf.gcode_to_file(gcode, file_name, save_path)
     
-   
     # without the infill the code works fine 
     # searching the infill issue 
     
