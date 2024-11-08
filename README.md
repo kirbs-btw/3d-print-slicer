@@ -50,7 +50,7 @@ $$
 l_x(t) = (x_0 + t \cdot d_x, y), \quad l_y(t) = (x, y_0 + t \cdot d_y)
 $$
 
-where $ d_x $ and $ d_y $ are directional vectors, and intersections between the infill lines and object boundaries are calculated.
+where $d_x$ and $d_y$ are directional vectors, and intersections between the infill lines and object boundaries are calculated.
 
 **Intersection Ordering**: For each line, intersection points are sorted by their distance to the origin, defined by:
 
